@@ -1,7 +1,7 @@
 
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router'; // 👈 Import this!
+import { useRouter } from 'expo-router';
 
 type HeaderProps = {
   onMenuPress: () => void;
@@ -12,7 +12,7 @@ export default function Header({ onMenuPress }: HeaderProps) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => router.push('/profile')}>
-        <Image source={require('../assets/icon.png')} style={{ width: 24, height: 24 }} />
+        <Ionicons name="person-circle-outline" size={32} />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push('/')}>
