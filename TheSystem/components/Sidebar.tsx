@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import TypingText from '@components/TypingText';
 
 type SidebarProps = {
   visible: boolean;
@@ -41,18 +42,18 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
               onClose();
             }}
           >
-            <Text style={{ padding: 10 }}>{item.label}</Text>
+            <TypingText style={{ padding: 10 }}>{item.label}</TypingText>
           </TouchableOpacity>
         ))}
       </View>
       <View style={styles.footer}>
         <View>
-          <Text style={styles.name}>Display naam</Text>
-          <Text style={styles.username}>@username</Text>
+          <TypingText style={styles.name}>Display naam</TypingText>
+          <TypingText style={styles.username}>@username</TypingText>
         </View>
         <Ionicons name="person-circle-outline" size={32} />
       </View>
-      <Text style={styles.logo}>The System Logo</Text>
+      <TypingText style={styles.logo}>The System Logo</TypingText>
     </Animated.View>
   );
 }

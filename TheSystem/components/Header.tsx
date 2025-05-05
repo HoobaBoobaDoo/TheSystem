@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import TypingText from '@components/TypingText';
 
 type HeaderProps = {
   onMenuPress: () => void;

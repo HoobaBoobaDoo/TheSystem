@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import TypingText from '@components/TypingText';
 
 export default function ConfirmScreen() {
   const router = useRouter();
@@ -11,13 +12,13 @@ export default function ConfirmScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <View style={styles.content}>
-        <Text style={styles.text}>Are you sure?</Text>
-        <Text style={styles.text}>In this mode you can't....</Text>
+        <TypingText style={styles.text}>Are you sure?</TypingText>
+        <TypingText style={styles.text}>In this mode you can't....</TypingText>
       </View>
 
       {/* Button */}
       <TouchableOpacity style={styles.button} onPress={() => router.push('/dungeon')}> 
-        <Text style={styles.buttonText}>Enter dungeon</Text>
+        <TypingText style={styles.buttonText}>Enter dungeon</TypingText>
       </TouchableOpacity>
     </View>
   );
@@ -29,19 +30,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'space-between',
     paddingVertical: 40,
-  },
-  header: {
-    height: 120,
-    backgroundColor: '#333',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 40,
-  },
-  headerText: {
-    color: '#fff',
-    fontSize: 16,
   },
   content: {
     flex: 1,

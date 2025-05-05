@@ -1,5 +1,6 @@
 
 import { View, Text, StyleSheet } from 'react-native';
+import TypingText from '@components/TypingText';
 
 type GoalCardProps = {
   top: string;
@@ -10,8 +11,8 @@ type GoalCardProps = {
 export default function GoalCard({ top, bottom, light = false }: GoalCardProps) {
   return (
     <View style={[styles.card, light && styles.light]}>
-      <Text style={styles.textTop}>{top}</Text>
-      <Text style={styles.textBottom}>{bottom}</Text>
+      <TypingText style={styles.textTop}>{top}</TypingText>
+      <TypingText style={styles.textBottom}>{bottom}</TypingText>
     </View>
   );
 }

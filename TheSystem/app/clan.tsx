@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import TypingText from '@components/TypingText';
 
 export default function GuildScreen() {
   return (
@@ -9,11 +10,11 @@ export default function GuildScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <Ionicons name="person-circle" size={80} color="#555" />
 
-        <Text style={styles.guildTitle}>The productive monkeys</Text>
+        <TypingText style={styles.guildTitle}>The productive monkeys</TypingText>
 
-        <Text style={styles.subtitle}>
+        <TypingText style={styles.subtitle}>
           Our goal is to be the most productive monkeys on the planet!
-        </Text>
+        </TypingText>
 
         {Array.from({ length: 6 }).map((_, index) => (
           <TouchableOpacity key={index} style={styles.placeholderBox} />
@@ -27,19 +28,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#111',
-  },
-  header: {
-    backgroundColor: '#222',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
   },
   content: {
     alignItems: 'center',

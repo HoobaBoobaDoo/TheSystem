@@ -1,5 +1,6 @@
 
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import TypingText from '@components/TypingText';
 
 type PrimaryButtonProps = {
   label: string;
@@ -9,7 +10,7 @@ type PrimaryButtonProps = {
 export default function PrimaryButton({ label, onPress }: PrimaryButtonProps) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.label}>{label}</Text>
+      <TypingText style={styles.label}>{label}</TypingText>
     </TouchableOpacity>
   );
 }

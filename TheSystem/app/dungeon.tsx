@@ -4,6 +4,7 @@ import GoalDisplayCard from '@components/GoalDisplayCard';
 import PrimaryButton from '@components/PrimaryButton';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
+import TypingText from '@components/TypingText';
 
 
 export default function DungeonScreen() {
@@ -11,7 +12,7 @@ export default function DungeonScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Goal Intentions */}
-      <Text style={styles.label}>I will:</Text>
+      <TypingText style={styles.label}>I will:</TypingText>
       <GoalDisplayCard text="999 steps" />
       <GoalDisplayCard text="10 pushups" />
       <GoalDisplayCard text="Daily planking" />
@@ -22,7 +23,7 @@ export default function DungeonScreen() {
       style={styles.button} 
       onPress={() => router.push('/leave')}
       >
-      <Text style={styles.buttonText}>Leave Dungeon</Text>
+      <TypingText style={styles.buttonText}>Leave Dungeon</TypingText>
     </TouchableOpacity>
 
 

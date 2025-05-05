@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
+import TypingText from '@components/TypingText';
 
 type GoalDisplayCardProps = {
   text: string;
@@ -7,7 +8,7 @@ type GoalDisplayCardProps = {
 export default function GoalDisplayCard({ text }: GoalDisplayCardProps) {
   return (
     <View style={styles.card}>
-      <Text style={styles.text}>{text}</Text>
+      <TypingText style={styles.text}>{text}</TypingText>
     </View>
   );
 }

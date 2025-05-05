@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import TypingText from '@components/TypingText';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -13,10 +14,10 @@ export default function ProfileScreen() {
       <View style={styles.profileSection}>
         
       <Ionicons name="person-circle-outline" size={150} />
-        <Text style={styles.name}>Ruben Jamart</Text>
-        <Text style={styles.bio}>
-          I love being productive!{'\n'}That’s why I’m making this app!
-        </Text>
+        <TypingText style={styles.name}>Ruben Jamart</TypingText>
+        <TypingText style={styles.bio}>
+          I love being productive! That’s why I’m making this app!
+        </TypingText>
 
         <View style={styles.groupInfo}>
           <Image
@@ -24,14 +25,14 @@ export default function ProfileScreen() {
             style={styles.groupIcon}
           />
           <TouchableOpacity onPress={() => router.push('/clan')}>
-            <Text style={styles.groupName}>The productive monkeys</Text>
+            <TypingText style={styles.groupName}>The productive monkeys</TypingText>
           </TouchableOpacity>
         </View>
 
         <View style={styles.statsRow}>
-          <Text style={styles.statText}>S-rank</Text>
-          <Text style={styles.statText}>⚡ Warrior</Text>
-          <Text style={styles.statText}>Level: 35</Text>
+          <TypingText style={styles.statText}>S-rank</TypingText>
+          <TypingText style={styles.statText}>⚡ Warrior</TypingText>
+          <TypingText style={styles.statText}>Level: 35</TypingText>
         </View>
       </View>
 
