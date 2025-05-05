@@ -45,12 +45,12 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 
 ## 2: Schermen:
 
-###1: Homescherm met:
+### 1: Homescherm met:
 - To do lijst met een slider vanbinnen
 - Functionaliteit voor iets aan to do lijst toe te voegen
 - Je stats
 
-## 2: Login met...
+### 2: Login met...
 - Google login
 - Apple login
 - E-mail login met paswoord
@@ -60,7 +60,7 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 - Apple login
 - E-mail registratie met paswoord
 
-## 4: Profiel met:
+### 4: Profiel met:
 - Username
 - Naam
 - profielfoto
@@ -68,14 +68,14 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 - Extra info van de app
 - je rank
 
-## 5: Settings
+### 5: Settings
 - Privacy settings
     - Stats publiek tonen of niet (je kan kiezen welke)
     - 
 
-## 6: Lijst custom to do items
+### 6: Lijst custom to do items
 
-## 7: Wekelijkse to do list
+### 7: Wekelijkse to do list
 
 
 ## 3: Functionaliteiten:
