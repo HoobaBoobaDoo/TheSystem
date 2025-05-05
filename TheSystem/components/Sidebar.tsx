@@ -1,4 +1,3 @@
-// components/Sidebar.tsx
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,11 +5,19 @@ import { Ionicons } from '@expo/vector-icons';
 type SidebarProps = {
   visible: boolean;
   onClose: () => void;
+  navigate: (route: string) => void;
 };
 
-export default function Sidebar({ visible, onClose }: SidebarProps) {
+export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
   const slideAnim = useRef(new Animated.Value(Dimensions.get('window').width)).current;
-
+  const menuItems = [
+    { label: 'Home', route: '/' },
+    { label: 'Profile', route: '/profile' },
+    { label: 'Edit Dashboard', route: '/edit' },
+    { label: 'Clan', route: '/clan' },
+    { label: 'Settings', route: '/settings' }
+  ];
+  
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: visible ? 0 : Dimensions.get('window').width,
@@ -24,13 +31,20 @@ export default function Sidebar({ visible, onClose }: SidebarProps) {
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
         <Ionicons name="close-outline" size={28} />
       </TouchableOpacity>
-
       <View style={styles.menu}>
-        {Array(5).fill(0).map((_, i) => (
-          <View key={i} style={styles.menuItem} />
+        {menuItems.map((item, i) => (
+          <TouchableOpacity
+            key={i}
+            style={styles.menuItem}
+            onPress={() => {
+              navigate(item.route);
+              onClose();
+            }}
+          >
+            <Text style={{ padding: 10 }}>{item.label}</Text>
+          </TouchableOpacity>
         ))}
       </View>
-
       <View style={styles.footer}>
         <View>
           <Text style={styles.name}>Display naam</Text>
@@ -38,7 +52,6 @@ export default function Sidebar({ visible, onClose }: SidebarProps) {
         </View>
         <Ionicons name="person-circle-outline" size={32} />
       </View>
-
       <Text style={styles.logo}>The System Logo</Text>
     </Animated.View>
   );

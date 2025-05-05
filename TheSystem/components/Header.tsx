@@ -1,24 +1,20 @@
-
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 
 type HeaderProps = {
   onMenuPress: () => void;
+  navigate: (route: string) => void;
 };
 
-export default function Header({ onMenuPress }: HeaderProps) {
-    const router = useRouter();
+export default function Header({ onMenuPress, navigate }: HeaderProps) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.push('/profile')}>
+      <TouchableOpacity onPress={() => navigate('/profile')}>
         <Ionicons name="person-circle-outline" size={32} />
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => router.push('/')}>
-      <Text style={styles.title}>The System</Text>
+      <TouchableOpacity onPress={() => navigate('/')}>
+        <Text style={styles.title}>The System</Text>
       </TouchableOpacity>
-
       <TouchableOpacity onPress={onMenuPress}>
         <Ionicons name="menu-outline" size={28} />
       </TouchableOpacity>

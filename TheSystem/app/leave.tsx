@@ -1,23 +1,25 @@
 import React from 'react';
-import { Stack } from 'expo-router';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { FontAwesome6 } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function LeaveScreen() {
   const router = useRouter();
+  const { next } = useLocalSearchParams();
+  const nextRoute = typeof next === 'string' ? next : '/';
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
-
       <View style={styles.content}>
         <Text style={styles.text}>Are you sure you want to leave?</Text>
-        <Text style={styles.text}>Your will fail this dungeon!</Text>
+        <Text style={styles.text}>You will fail this dungeon!</Text>
       </View>
-
-      {/* Button */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/dungeon')}> 
-        <Text style={styles.buttonText}>Enter dungeon</Text>
+      
+      <TouchableOpacity style={styles.button} onPress={() => router.push(nextRoute)}>
+        <Text style={styles.buttonText}>Leave dungeon</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => router.back()}>
+        <Text style={styles.buttonText}>Go back to dungeon</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,19 +31,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'space-between',
     paddingVertical: 40,
-  },
-  header: {
-    height: 120,
-    backgroundColor: '#333',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 40,
-  },
-  headerText: {
-    color: '#fff',
-    fontSize: 16,
   },
   content: {
     flex: 1,
