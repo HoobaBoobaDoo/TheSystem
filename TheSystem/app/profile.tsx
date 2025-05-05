@@ -1,14 +1,31 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, RefreshControl  } from 'react-native';
 import { Stack } from 'expo-router';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
+import React, { useState } from 'react';
 
 export default function ProfileScreen() {
   const router = useRouter();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+const onRefresh = () => {
+  setRefreshing(true);
+  "Ruben Jamart"
+"S-rank"
+"Level: 35"
+  setTimeout(() => {
+    setRefreshing(false);
+  }, 2000);
+};
+
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <Stack.Screen options={{ headerShown: false }} />
 
       <View style={styles.profileSection}>
@@ -20,10 +37,7 @@ export default function ProfileScreen() {
         </TypingText>
 
         <View style={styles.groupInfo}>
-          <Image
-            source={require('../assets/icon.png')}
-            style={styles.groupIcon}
-          />
+        <Ionicons name="person-circle-outline" size={30} />
           <TouchableOpacity onPress={() => router.push('/clan')}>
             <TypingText style={styles.groupName}>The productive monkeys</TypingText>
           </TouchableOpacity>
@@ -74,13 +88,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
   },
-  groupIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 6,
-  },
   groupName: {
     fontSize: 14,
+    marginLeft: 10,
   },
   statsRow: {
     flexDirection: 'row',

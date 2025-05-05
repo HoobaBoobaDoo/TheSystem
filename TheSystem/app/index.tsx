@@ -1,32 +1,41 @@
-import { View, Text, StyleSheet,TouchableOpacity, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import GoalDisplayCard from '@components/GoalDisplayCard';
-import PrimaryButton from '@components/PrimaryButton';
 import GoalCard from '@components/GoalCard';
-import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import TypingText from '@components/TypingText';
+import React, { useState } from 'react';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Goal Intentions */}
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <TypingText style={styles.label}>I will:</TypingText>
       <GoalDisplayCard text="999 steps" />
       <GoalDisplayCard text="10 pushups" />
       <GoalDisplayCard text="Daily planking" />
       <GoalDisplayCard text="99 minutes in dungeon" />
 
-      {/* Enter Dungeon Button */}
-      <TouchableOpacity 
-      style={styles.button} 
-      onPress={() => router.push('/confirm')}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push('/confirm')}
       >
-      <TypingText style={styles.buttonText}>Enter Dungeon</TypingText>
-    </TouchableOpacity>
+        <TypingText style={styles.buttonText}>Enter Dungeon</TypingText>
+      </TouchableOpacity>
 
-
-      {/* Progress / Stats Cards */}
       <View style={styles.cardGrid}>
         <GoalCard top="999" bottom="steps" />
         <GoalCard top="10" bottom="pushups" light />

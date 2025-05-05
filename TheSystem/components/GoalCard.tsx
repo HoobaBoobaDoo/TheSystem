@@ -10,7 +10,7 @@ type GoalCardProps = {
 
 export default function GoalCard({ top, bottom, light = false }: GoalCardProps) {
   return (
-    <View style={[styles.card, light && styles.light]}>
+    <View style={styles.card}>
       <TypingText style={styles.textTop}>{top}</TypingText>
       <TypingText style={styles.textBottom}>{bottom}</TypingText>
     </View>
@@ -26,9 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
-  },
-  light: {
-    backgroundColor: '#ddd',
   },
   textTop: {
     fontSize: 18,

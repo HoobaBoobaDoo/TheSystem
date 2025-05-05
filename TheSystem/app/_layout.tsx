@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { useState } from "react";
 import Header from "@components/Header";
 import Sidebar from "@components/Sidebar";
+import Footer from "@components/Footer";
 
 export default function Layout() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -10,10 +11,8 @@ export default function Layout() {
   const router = useRouter();
   const segments = useSegments();
 
-  // Check if we're inside the dungeon
   const inDungeon = segments.includes("dungeon");
 
-  // Wrapped navigation function
   const navigate = (targetRoute: string) => {
     if (inDungeon) {
       router.push({ pathname: '/leave', params: { next: targetRoute } });
@@ -21,26 +20,29 @@ export default function Layout() {
       router.push(targetRoute);
     }
   };
-  
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <Header 
         onMenuPress={() => setSidebarVisible(true)} 
-        navigate={navigate}  // Pass the custom navigation to header
+        navigate={navigate}
       />
       <Sidebar
         visible={sidebarVisible}
         onClose={() => setSidebarVisible(false)}
-        navigate={navigate}  // Pass the custom navigation to sidebar
+        navigate={navigate}
       />
 
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: "slide_from_right",
-        }}
-      />
-    </>
+      <View style={{ flex: 1 }}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: "slide_from_right",
+          }}
+        />
+      </View>
+
+      <Footer navigate={navigate} />
+    </View>
   );
 }

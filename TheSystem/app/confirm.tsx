@@ -14,12 +14,17 @@ export default function ConfirmScreen() {
       <View style={styles.content}>
         <TypingText style={styles.text}>Are you sure?</TypingText>
         <TypingText style={styles.text}>In this mode you can't....</TypingText>
+        <TypingText style={styles.text}>   - Exit the page</TypingText>
+        <TypingText style={styles.text}>   - Exit the app</TypingText>
+        <TypingText style={styles.text}>If you do so, you will lose all fail this dungeon and lose all your dungeon progress!</TypingText>
       </View>
 
-      {/* Button */}
       <TouchableOpacity style={styles.button} onPress={() => router.push('/dungeon')}> 
         <TypingText style={styles.buttonText}>Enter dungeon</TypingText>
       </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => router.back()}>
+              <TypingText style={styles.buttonText}>Go back</TypingText>
+            </TouchableOpacity>
     </View>
   );
 }
