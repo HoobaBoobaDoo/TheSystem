@@ -71,8 +71,7 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 ### 5: Settings
 - Privacy settings
     - Stats publiek tonen of niet (je kan kiezen welke)
-    - 
-
+  
 ### 6: Lijst custom to do items
 
 ### 7: Wekelijkse to do list
