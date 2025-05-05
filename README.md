@@ -1,6 +1,6 @@
 # TheSystem
 
-### Ons verhaal:
+### 1: Ons verhaal:
 Het doel is om een app te maken dat mensen inspireert productief te blijven. Denk aan de pokemon go voor naar buiten gaan.
 
 Dit is slechts in demo van wat ik van plan ben. Het doel is om hier een kleine minigame van te maken elke keer als je productief bent.
@@ -13,6 +13,7 @@ De ranks gaan als volgt:
 - C-rank
 - D-rank
 - E-rank
+
 Je ranks veranderen automatisch als je niet productief genoeg bent.
 
 Productiviteit wordt gemeten in hoe lang je in de dungeons bent. De dungeon modus is eigenlijk een scherm waar je karakter in een dungeon vecht, natuurlijk moet je karakter kunnen focusen. Als je de app verlaat krijg je een melding dat je karakter niet kan focussen.
