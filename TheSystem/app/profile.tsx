@@ -1,18 +1,18 @@
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
-import Header from '@components/Header';
 import GoalCard from '@components/GoalCard';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ProfileScreen() {
+  const router = useRouter();
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
 
       <View style={styles.profileSection}>
-        <Image
-          source={require('../assets/icon.png')}
-          style={styles.profileImage}
-        />
+        
+      <Ionicons name="person-circle-outline" size={150} />
         <Text style={styles.name}>Ruben Jamart</Text>
         <Text style={styles.bio}>
           I love being productive!{'\n'}That’s why I’m making this app!
@@ -23,7 +23,9 @@ export default function ProfileScreen() {
             source={require('../assets/icon.png')}
             style={styles.groupIcon}
           />
-          <Text style={styles.groupName}>The productive monkeys</Text>
+          <TouchableOpacity onPress={() => router.push('/clan')}>
+            <Text style={styles.groupName}>The productive monkeys</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.statsRow}>
@@ -46,6 +48,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    height: '100%',
   },
   profileSection: {
     alignItems: 'center',

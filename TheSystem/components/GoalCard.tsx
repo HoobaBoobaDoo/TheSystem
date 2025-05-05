@@ -19,7 +19,7 @@ export default function GoalCard({ top, bottom, light = false }: GoalCardProps) 
 const styles = StyleSheet.create({
   card: {
     width: '47%',
-    height: '47%',
+    height: '40%',
     backgroundColor: '#555',
     borderRadius: 12,
     justifyContent: 'center',

@@ -3,11 +3,10 @@ import { View, Text, StyleSheet,TouchableOpacity, Button, ScrollView } from 'rea
 import GoalDisplayCard from '@components/GoalDisplayCard';
 import PrimaryButton from '@components/PrimaryButton';
 import GoalCard from '@components/GoalCard';
-import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 
-export default function HomeScreen() {
+export default function DungeonScreen() {
   const router = useRouter();
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -21,9 +20,9 @@ export default function HomeScreen() {
       {/* Enter Dungeon Button */}
       <TouchableOpacity 
       style={styles.button} 
-      onPress={() => router.push('/confirm')}
+      onPress={() => router.push('/leave')}
       >
-      <Text style={styles.buttonText}>Enter Dungeon</Text>
+      <Text style={styles.buttonText}>Leave Dungeon</Text>
     </TouchableOpacity>
 
 
@@ -41,6 +40,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: '#000',
     height: '100%',
   },
   label: {
@@ -56,21 +56,21 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   button: {
-    backgroundColor: '#6E6E6E',
-    paddingVertical: 14,
-    paddingHorizontal: 32,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    backgroundColor: '#6E6E6E',    // primary background color
+    paddingVertical: 14,        // vertical spacing
+    paddingHorizontal: 32,      // horizontal spacing
+    borderRadius: 6,            // rounded corners
+    alignItems: 'center',       // center text horizontally
+    justifyContent: 'center',   // center text vertically
+    shadowColor: '#000',        // subtle shadow for depth
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 2,               // Android shadow
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600',          // semi-bold
   },
 });
