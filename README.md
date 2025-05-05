@@ -20,7 +20,7 @@ Productiviteit wordt gemeten in hoe lang je in de dungeons bent. De dungeon modu
 Hiermee begint een timer, als de timer voorbij is, verlies je de dungeon. In de dungeon modus kan je je alleen je stats op het homescherm zien en de portaal van de dungeon.
 Je kiest in het begin de parameters van de dungeon, juist alsof je op een app de perfecte dungeon zoekt die bij jouw past, ga je hier zoeken naar wat je wilt bereiken in de dungeon.
 
-Dit kan zijn:
+### 1.1: Dit kan zijn:
 - Bepaalde to-do list items completen
 - Aantal voetstappen of andere stats omhoog halen.
 - Een bepaalde tijd erin blijven, zoals 2 uur.
@@ -33,7 +33,7 @@ Je rank kan verlagen en omhoog gaan, depending on hoe productief je bent en of j
 
 Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zijn. Als je een dag je goals niet complete, krijg je een melding dat je een joker hebt gebruikt. Je kan een tijd instellen voor een melding te krijgen voor te checken of je je dingen hebt gedaan voor de dag.
 
-### 1.1: Belangrijk:
+### 1.2: Belangrijk:
 - Alles zo snel mogelijk verlopen
 - Zo veel mogelijk herhaalbaar voor efficiëntie
 - Zo veel mogelijk linken voor duidelijkheid
@@ -45,22 +45,22 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 
 ## 2: Schermen:
 
-1: Homescherm met:
+###1: Homescherm met:
 - To do lijst met een slider vanbinnen
 - Functionaliteit voor iets aan to do lijst toe te voegen
 - Je stats
 
-2: Login met...
+## 2: Login met...
 - Google login
 - Apple login
 - E-mail login met paswoord
 
-3: Registreren met...
+## 3: Registreren met...
 - Google login
 - Apple login
 - E-mail registratie met paswoord
 
-4: Profiel met:
+## 4: Profiel met:
 - Username
 - Naam
 - profielfoto
@@ -68,14 +68,14 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 - Extra info van de app
 - je rank
 
-5: Settings
+## 5: Settings
 - Privacy settings
     - Stats publiek tonen of niet (je kan kiezen welke)
     - 
 
-6: Lijst custom to do items
+## 6: Lijst custom to do items
 
-7: Wekelijkse to do list
+## 7: Wekelijkse to do list
 
 
 ## 3: Functionaliteiten:
