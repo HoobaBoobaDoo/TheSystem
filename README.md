@@ -33,7 +33,7 @@ Je rank kan verlagen en omhoog gaan, depending on hoe productief je bent en of j
 
 Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zijn. Als je een dag je goals niet complete, krijg je een melding dat je een joker hebt gebruikt. Je kan een tijd instellen voor een melding te krijgen voor te checken of je je dingen hebt gedaan voor de dag.
 
-#### Belangrijk:
+#### 1.1: Belangrijk:
 - Alles zo snel mogelijk verlopen
 - Zo veel mogelijk herhaalbaar voor efficiëntie
 - Zo veel mogelijk linken voor duidelijkheid
@@ -43,7 +43,7 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 - Customizability voor home gevoel
 
 
-### Schermen:
+### 2: Schermen:
 
 1: Homescherm met:
 - To do lijst met een slider vanbinnen
@@ -78,13 +78,13 @@ Om niet te streng te zijn krijg je elke week 2 jokers voor niet productief te zi
 7: Wekelijkse to do list
 
 
-### Functionaliteiten:
+### 3: Functionaliteiten:
 - Notifications voor dingen gedaan krijgen
 - Voetstappen tellen
 - Share functionaliteit voor het sharen van je profiel en een download naar de app.
 - Camera en bestandssysteem voor profielfoto
 
-### Implementatie:
+### 4: Implementatie:
 - stappen automatisch geteld
 - fitness reps: 1 tik voegt 1 rep toe, inhouden laat je intypen
 - Tijdsgebonden oefeningen: tik voor completion
