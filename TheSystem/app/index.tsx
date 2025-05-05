@@ -1,18 +1,17 @@
-// app/index.tsx
 import { View, Text, StyleSheet,TouchableOpacity, Button, ScrollView } from 'react-native';
 import GoalDisplayCard from '@components/GoalDisplayCard';
 import PrimaryButton from '@components/PrimaryButton';
 import GoalCard from '@components/GoalCard';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-
+import TypingText from '@components/TypingText';
 
 export default function HomeScreen() {
   const router = useRouter();
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Goal Intentions */}
-      <Text style={styles.label}>I will:</Text>
+      <TypingText style={styles.label}>I will:</TypingText>
       <GoalDisplayCard text="999 steps" />
       <GoalDisplayCard text="10 pushups" />
       <GoalDisplayCard text="Daily planking" />
@@ -23,7 +22,7 @@ export default function HomeScreen() {
       style={styles.button} 
       onPress={() => router.push('/confirm')}
       >
-      <Text style={styles.buttonText}>Enter Dungeon</Text>
+      <TypingText style={styles.buttonText}>Enter Dungeon</TypingText>
     </TouchableOpacity>
 
 
