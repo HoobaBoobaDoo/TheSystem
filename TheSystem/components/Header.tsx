@@ -14,7 +14,7 @@ export default function Header({ onMenuPress, navigate }: HeaderProps) {
         <Ionicons name="person-circle-outline" size={32} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigate('/')}>
-        <Text style={styles.title}>The System</Text>
+        <TypingText style={styles.title}>The System</TypingText>
       </TouchableOpacity>
       <TouchableOpacity onPress={onMenuPress}>
         <Ionicons name="menu-outline" size={28} />

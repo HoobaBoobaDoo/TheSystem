@@ -9,20 +9,18 @@ export default function EditStatsScreen() {
 
       <ScrollView contentContainerStyle={styles.content}>
 
-        <Text style={styles.sectionTitle}>Selected stats</Text>
+        <TypingText style={styles.sectionTitle}>Selected stats</TypingText>
         {Array.from({ length: 4 }).map((_, index) => (
           <TouchableOpacity key={`selected-${index}`} style={styles.statBox} />
         ))}
 
-        {/* Section: Other Stats */}
-        <Text style={styles.sectionTitle}>Other stats</Text>
+        <TypingText style={styles.sectionTitle}>Other stats</TypingText>
         {Array.from({ length: 6 }).map((_, index) => (
           <TouchableOpacity key={`other-${index}`} style={styles.statBox} />
         ))}
 
-        {/* Done Button */}
         <TouchableOpacity style={styles.doneButton}>
-          <Text style={styles.doneButtonText}>Done</Text>
+          <TypingText style={styles.doneButtonText}>Done</TypingText>
         </TouchableOpacity>
       </ScrollView>
     </View>
