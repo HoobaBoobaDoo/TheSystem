@@ -30,7 +30,7 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
   return (
     <Animated.View style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}>
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-        <Ionicons name="close-outline" size={28} />
+        <Ionicons name="close-outline" size={28} style={styles.white} />
       </TouchableOpacity>
       <View style={styles.menu}>
         {menuItems.map((item, i) => (
@@ -51,7 +51,7 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
           <TypingText style={styles.name}>Display naam</TypingText>
           <TypingText style={styles.username}>@username</TypingText>
         </View>
-        <Ionicons name="person-circle-outline" size={32} />
+        <Ionicons name="person-circle-outline" size={32} style={styles.white} />
       </View>
       <TypingText style={styles.logo}>The System Logo</TypingText>
     </Animated.View>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: '80%',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(27, 27, 27, 1)',
     padding: 20,
     zIndex: 10,
   },
@@ -92,14 +92,18 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
+    color: '#fff',
   },
   username: {
     fontStyle: 'italic',
-    color: '#666',
+    color: '#fff',
   },
   logo: {
     textAlign: 'center',
     marginTop: 16,
-    color: '#aaa',
+    color: '#fff',
   },
+  white: {
+    color: '#fff',
+  }
 });

@@ -1,39 +1,76 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  ImageBackground,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
 
 export default function GuildScreen() {
-  return (
-    <View style={styles.container}>
+  const [refreshing, setRefreshing] = React.useState(false);
 
-      <ScrollView contentContainerStyle={styles.content}>
-        <Ionicons name="person-circle" size={80} color="#555" />
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
+  return (
+    <ImageBackground
+      source={require('../assets/neon_squares.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+      <View style={styles.overlay}>
+        <Ionicons name="person-circle" size={80} color="#fff" />
 
         <TypingText style={styles.guildTitle}>The productive monkeys</TypingText>
 
         <TypingText style={styles.subtitle}>
           Our goal is to be the most productive monkeys on the planet!
         </TypingText>
+        </View>
 
-        {Array.from({ length: 6 }).map((_, index) => (
-          <TouchableOpacity key={index} style={styles.placeholderBox} />
+      <View style={styles.overlay}>
+        {Array.from({ length: 20 }).map((_, index) => (
+          <TouchableOpacity key={index} style={styles.member} >
+            <TypingText style={{ color: '#fff', textAlign: 'center' }}>
+              Member
+            </TypingText>
+          </TouchableOpacity>
         ))}
+        </View>
       </ScrollView>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: '#111',
+  },
+  overlay: {
+    marginTop: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 12,
+    borderRadius: 10,
+    width: '100%',
+    alignItems: 'center',
   },
   content: {
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
     flexGrow: 1,
   },
   guildTitle: {
@@ -41,19 +78,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 12,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   subtitle: {
     marginTop: 8,
     fontSize: 14,
-    color: '#333',
+    color: '#ddd',
     textAlign: 'center',
   },
-  placeholderBox: {
+  member: {
     width: '90%',
     height: 40,
-    backgroundColor: '#ddd',
+    backgroundColor: 'rgba(255,255,255,0.3)',
     borderRadius: 6,
     marginTop: 12,
+    alignSelf: 'center',
+    textAlignVertical: 'center',
+    justifyContent: 'center',
   },
 });

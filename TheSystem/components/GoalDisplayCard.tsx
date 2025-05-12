@@ -15,7 +15,7 @@ export default function GoalDisplayCard({ text }: GoalDisplayCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'rgba(168, 168, 168, 0.8)',
     borderRadius: 6,
     padding: 12,
     marginVertical: 6,

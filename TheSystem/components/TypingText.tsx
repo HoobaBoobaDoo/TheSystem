@@ -55,5 +55,12 @@ export default function TypingText({
     };
   }, [text, speed, startDelay]);
 
-  return <Text {...props}>{displayedText}</Text>;
+  return (
+  <Text
+    {...props}
+    style={[{ fontFamily: 'Orbitron' }, props.style]}
+  >
+    {displayedText}
+  </Text>
+);
 }

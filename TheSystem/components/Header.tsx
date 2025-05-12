@@ -11,13 +11,13 @@ export default function Header({ onMenuPress, navigate }: HeaderProps) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigate('/profile')}>
-        <Ionicons name="person-circle-outline" size={32} />
+        <Ionicons name="person-circle-outline" size={32} style={styles.white}  />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigate('/')}>
-        <TypingText style={styles.title}>The System</TypingText>
+        <TypingText style={[styles.title, styles.white]}>The System</TypingText>
       </TouchableOpacity>
       <TouchableOpacity onPress={onMenuPress}>
-        <Ionicons name="menu-outline" size={28} />
+        <Ionicons name="menu-outline" size={28} style={styles.white} />
       </TouchableOpacity>
     </View>
   );
@@ -30,12 +30,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: 'rgba(0, 0, 0, 1)',
   },
   title: {
     fontSize: 16,
     fontWeight: '500',
   },
+  white: {
+    color: '#fff',
+  }
 });

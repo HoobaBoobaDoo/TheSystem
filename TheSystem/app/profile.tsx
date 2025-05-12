@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, RefreshControl  } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, RefreshControl, ImageBackground  } from 'react-native';
 import { Stack } from 'expo-router';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
@@ -23,40 +23,50 @@ const onRefresh = () => {
 
 
   return (
+    <ImageBackground
+            source={require('../assets/neon_stars.jpeg')}
+              style={styles.background}
+              resizeMode="cover"
+            >
     <ScrollView contentContainerStyle={styles.container} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }>
       <Stack.Screen options={{ headerShown: false }} />
 
+      <View style={styles.overlay}>
       <View style={styles.profileSection}>
         
-      <Ionicons name="person-circle-outline" size={150} />
-        <TypingText style={styles.name}>Ruben Jamart</TypingText>
-        <TypingText style={styles.bio}>
+      <Ionicons name="person-circle-outline" size={150} style={styles.white}/>
+        <TypingText style={[styles.name, styles.white]}>Ruben Jamart</TypingText>
+        <TypingText style={[styles.bio, styles.white]}>
           I love being productive! That’s why I’m making this app!
         </TypingText>
 
         <View style={styles.groupInfo}>
-        <Ionicons name="person-circle-outline" size={30} />
+        <Ionicons name="person-circle-outline" size={30} style={styles.white} />
           <TouchableOpacity onPress={() => router.push('/clan')}>
-            <TypingText style={styles.groupName}>The productive monkeys</TypingText>
+            <TypingText style={[styles.groupName, styles.white]}>The productive monkeys</TypingText>
           </TouchableOpacity>
         </View>
 
         <View style={styles.statsRow}>
-          <TypingText style={styles.statText}>S-rank</TypingText>
-          <TypingText style={styles.statText}>⚡ Warrior</TypingText>
-          <TypingText style={styles.statText}>Level: 35</TypingText>
+          <TypingText style={[styles.statText, styles.white]}>S-rank</TypingText>
+          <TypingText style={[styles.statText, styles.white]}>⚡ Warrior</TypingText>
+          <TypingText style={[styles.statText, styles.white]}>Level: 35</TypingText>
         </View>
       </View>
+      </View>
 
+      <View style={styles.overlay}>
       <View style={styles.cardGrid}>
         <GoalCard top="999" bottom="steps" />
         <GoalCard top="10" bottom="pushups" light />
         <GoalCard top="✓" bottom="Daily planking" />
         <GoalCard top="99 min" bottom="in dungeon" />
       </View>
+      </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
@@ -64,6 +74,18 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     height: '100%',
+  },
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingTop: 0,
+    marginTop: 0,
+  },
+  overlay: {
+    marginTop: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 12,
+    borderRadius: 10,
   },
   profileSection: {
     alignItems: 'center',
@@ -107,5 +129,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12,
     marginTop: 12,
+    height: '45%',
   },
+  white: {
+    color: '#fff',
+  }
 });
