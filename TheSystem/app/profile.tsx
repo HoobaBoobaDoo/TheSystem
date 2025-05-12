@@ -1,74 +1,87 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, RefreshControl, ImageBackground  } from 'react-native';
-import { Stack } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, RefreshControl, ImageBackground } from 'react-native';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getCurrentUser, User } from '../utils/auth';
 
 export default function ProfileScreen() {
   const router = useRouter();
-
   const [refreshing, setRefreshing] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-const onRefresh = () => {
-  setRefreshing(true);
-  "Ruben Jamart"
-"S-rank"
-"Level: 35"
-  setTimeout(() => {
-    setRefreshing(false);
-  }, 2000);
-};
+  const onRefresh = async () => {
+    setRefreshing(true);
+    const data = await getCurrentUser();
+    setUser(data);
+    setTimeout(() => setRefreshing(false), 1000);
+  };
 
+  useEffect(() => {
+    onRefresh();
+  }, []);
 
   return (
     <ImageBackground
-            source={require('../assets/neon_stars.jpeg')}
-              style={styles.background}
-              resizeMode="cover"
-            >
-    <ScrollView contentContainerStyle={styles.container} refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }>
-      <Stack.Screen options={{ headerShown: false }} />
+      source={require('../assets/neon_stars.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <ScrollView contentContainerStyle={styles.container} refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+        <View style={styles.overlay}>
+          <View style={styles.profileSection}>
+            <Ionicons name="person-circle-outline" size={150} style={styles.white} />
 
-      <View style={styles.overlay}>
-      <View style={styles.profileSection}>
-        
-      <Ionicons name="person-circle-outline" size={150} style={styles.white}/>
-        <TypingText style={[styles.name, styles.white]}>Ruben Jamart</TypingText>
-        <TypingText style={[styles.bio, styles.white]}>
-          I love being productive! That’s why I’m making this app!
-        </TypingText>
+            <TypingText style={[styles.name, styles.white]}>
+              {user?.fullName || 'Unknown Hunter'}
+            </TypingText>
 
-        <View style={styles.groupInfo}>
-        <Ionicons name="person-circle-outline" size={30} style={styles.white} />
-          <TouchableOpacity onPress={() => router.push('/clan')}>
-            <TypingText style={[styles.groupName, styles.white]}>The productive monkeys</TypingText>
-          </TouchableOpacity>
+            <TypingText style={[styles.bio, styles.white]}>
+              I love being productive! That’s why I’m making this app!
+            </TypingText>
+
+            <View style={styles.groupInfo}>
+              <Ionicons name="person-circle-outline" size={30} style={styles.white} />
+              <TouchableOpacity onPress={() => router.push('/clan')}>
+                <TypingText style={[styles.groupName, styles.white]}>
+                  The productive monkeys
+                </TypingText>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.statsRow}>
+              <TypingText style={[styles.statText, styles.white]}>
+                {user?.rank || 'Rank unknown'}
+              </TypingText>
+              <TypingText style={[styles.statText, styles.white]}>
+                ⚡ {user?.class || 'No class'}
+              </TypingText>
+              <TypingText style={[styles.statText, styles.white]}>
+                Level: 35
+              </TypingText>
+            </View>
+          </View>
         </View>
 
-        <View style={styles.statsRow}>
-          <TypingText style={[styles.statText, styles.white]}>S-rank</TypingText>
-          <TypingText style={[styles.statText, styles.white]}>⚡ Warrior</TypingText>
-          <TypingText style={[styles.statText, styles.white]}>Level: 35</TypingText>
+        <View style={styles.overlay}>
+          <View style={styles.cardGrid}>
+            <GoalCard top="999" bottom="steps" />
+            <GoalCard top="10" bottom="pushups" light />
+            <GoalCard top="✓" bottom="Daily planking" />
+            <GoalCard top="99 min" bottom="in dungeon" />
+          </View>
         </View>
-      </View>
-      </View>
-
-      <View style={styles.overlay}>
-      <View style={styles.cardGrid}>
-        <GoalCard top="999" bottom="steps" />
-        <GoalCard top="10" bottom="pushups" light />
-        <GoalCard top="✓" bottom="Daily planking" />
-        <GoalCard top="99 min" bottom="in dungeon" />
-      </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
     </ImageBackground>
   );
 }
+
+ProfileScreen.screenOptions = {
+  headerShown: false,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,12 +103,6 @@ const styles = StyleSheet.create({
   profileSection: {
     alignItems: 'center',
     marginBottom: 20,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
   },
   name: {
     fontSize: 18,
@@ -133,5 +140,5 @@ const styles = StyleSheet.create({
   },
   white: {
     color: '#fff',
-  }
+  },
 });

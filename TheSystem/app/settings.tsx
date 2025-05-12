@@ -1,18 +1,42 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
 import { useRouter } from 'expo-router';
+import { logoutUser } from '../utils/auth';
 
 export default function SettingsScreen() {
   const router = useRouter();
+
   const settingsOptions = [
     { label: 'Account', route: '/settings/account' },
     { label: 'Notifications', route: '/settings/notifications' },
     { label: 'Privacy', route: '/settings/privacy' },
     { label: 'Appearance', route: '/settings/appearance' },
-    { label: 'About', route: '/settings/about' }
+    { label: 'About', route: '/settings/about' },
+    { label: 'Logout', route: 'logout' },
   ];
+
+  const handlePress = (item: { label: string; route: string }) => {
+    if (item.route === 'logout') {
+      Alert.alert('Log out', 'Are you sure you want to log out?', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Log out',
+          style: 'destructive',
+          onPress: async () => {
+            await logoutUser();
+            router.replace('/login');
+          },
+        },
+      ]);
+    } else {
+      router.push(item.route);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -22,7 +46,7 @@ export default function SettingsScreen() {
           <TouchableOpacity
             key={index}
             style={styles.option}
-            onPress={() => router.push(item.route)}
+            onPress={() => handlePress(item)}
           >
             <TypingText style={styles.optionText}>{item.label}</TypingText>
             <Ionicons name="chevron-forward" size={20} color="#444" />

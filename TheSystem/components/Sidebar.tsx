@@ -1,7 +1,8 @@
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
-import { useEffect, useRef } from 'react';
+import { View, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
+import { getCurrentUser, User } from '../utils/auth';
 
 type SidebarProps = {
   visible: boolean;
@@ -11,6 +12,8 @@ type SidebarProps = {
 
 export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
   const slideAnim = useRef(new Animated.Value(Dimensions.get('window').width)).current;
+  const [user, setUser] = useState<User | null>(null);
+
   const menuItems = [
     { label: 'Home', route: '/' },
     { label: 'Profile', route: '/profile' },
@@ -18,7 +21,7 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
     { label: 'Clan', route: '/clan' },
     { label: 'Settings', route: '/settings' }
   ];
-  
+
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: visible ? 0 : Dimensions.get('window').width,
@@ -27,11 +30,16 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
     }).start();
   }, [visible]);
 
+  useEffect(() => {
+    getCurrentUser().then(setUser);
+  }, [visible]);
+
   return (
     <Animated.View style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}>
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
         <Ionicons name="close-outline" size={28} style={styles.white} />
       </TouchableOpacity>
+
       <View style={styles.menu}>
         {menuItems.map((item, i) => (
           <TouchableOpacity
@@ -46,13 +54,15 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
           </TouchableOpacity>
         ))}
       </View>
+
       <View style={styles.footer}>
         <View>
-          <TypingText style={styles.name}>Display naam</TypingText>
-          <TypingText style={styles.username}>@username</TypingText>
+          <TypingText style={styles.name}>{user?.fullName || 'Display naam'}</TypingText>
+          <TypingText style={styles.username}>@{user?.username || 'username'}</TypingText>
         </View>
         <Ionicons name="person-circle-outline" size={32} style={styles.white} />
       </View>
+
       <TypingText style={styles.logo}>The System Logo</TypingText>
     </Animated.View>
   );
@@ -105,5 +115,5 @@ const styles = StyleSheet.create({
   },
   white: {
     color: '#fff',
-  }
+  },
 });

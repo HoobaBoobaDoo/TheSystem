@@ -1,48 +1,72 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { loginUser } from '../utils/auth';
 
 export default function LoginScreen() {
   const router = useRouter();
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    const error = await loginUser(email, password);
+    if (error) {
+      Alert.alert('Login failed', error);
+    } else {
+      router.replace('/');
+    }
+  };
+
   return (
     <View style={styles.container}>
-
       <View style={styles.content}>
         <Text style={styles.welcome}>Welcome back!</Text>
 
         <Text style={styles.label}>E-mail:</Text>
-        <TextInput style={styles.input} placeholder="Enter your email" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
 
         <Text style={styles.label}>Password:</Text>
-        <TextInput style={styles.input} placeholder="Enter your password" secureTextEntry />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
 
         <View style={styles.iconRow}>
           {[...Array(4)].map((_, index) => (
-            <TouchableOpacity key={index} style={styles.iconButton}>
-            </TouchableOpacity>
+            <TouchableOpacity key={index} style={styles.iconButton} />
           ))}
         </View>
 
-        <TouchableOpacity style={styles.signupButton}>
+        <TouchableOpacity style={styles.signupButton} onPress={() => router.push('/register')}>
           <Text style={styles.signupText}>No account? Make one here!</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 40,
+    height: '100%',
   },
   header: {
     flexDirection: 'row',

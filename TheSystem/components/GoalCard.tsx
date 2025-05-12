@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   card: {
     width: '47%',
     height: '100%',
-    backgroundColor: '#555',
+    backgroundColor: 'rgba(114, 127, 131, 0.95)',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
