@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 const options = [
-  { label: 'I am doing this for fun', value: 'E-rank' },
-  { label: 'I just wanna be a little more productive', value: 'C-rank' },
-  { label: 'I want to be more motivated to be productive', value: 'B-rank' },
-  { label: 'I want to change my life', value: 'A-rank' },
-  { label: 'The grindset is the new mindset', value: 'S-rank' },
+  { label: "I am doing this for fun", value: "E-rank" },
+  { label: "I just wanna be a little more productive", value: "C-rank" },
+  { label: "I want to be more motivated to be productive", value: "B-rank" },
+  { label: "I want to change my life", value: "A-rank" },
+  { label: "The grindset is the new mindset", value: "S-rank" },
 ];
 
 export default function SelectRankScreen() {
   const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
-  const params = useLocalSearchParams();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.question}>How serious are you about productivity?</Text>
+      <Text style={styles.question}>
+        How serious are you about productivity?
+      </Text>
       {options.map((option, index) => (
         <TouchableOpacity
           key={index}
@@ -32,9 +39,8 @@ export default function SelectRankScreen() {
         onPress={() => {
           if (selected) {
             router.push({
-              pathname: '/selectProductivity',
+              pathname: "/selectProductivity",
               params: {
-                ...params,
                 rank: selected,
               },
             });
@@ -57,25 +63,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   option: {
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
     padding: 12,
     borderRadius: 6,
     marginBottom: 12,
   },
   selected: {
-    backgroundColor: '#aaa',
+    backgroundColor: "#aaa",
   },
   nextButton: {
     marginTop: 20,
-    backgroundColor: '#888',
+    backgroundColor: "#888",
     padding: 12,
     borderRadius: 6,
-    alignItems: 'center',
+    alignItems: "center",
   },
   disabled: {
     opacity: 0.5,
   },
   nextText: {
-    color: '#fff',
+    color: "#fff",
   },
 });

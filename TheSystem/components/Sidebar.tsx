@@ -2,7 +2,11 @@ import { View, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-
 import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
-import { getCurrentUser, User } from '../utils/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../utils/firebaseConfig';
+import { User } from '../utils/types';
+
 
 type SidebarProps = {
   visible: boolean;
@@ -31,8 +35,22 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
   }, [visible]);
 
   useEffect(() => {
-    getCurrentUser().then(setUser);
-  }, [visible]);
+  const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    if (firebaseUser) {
+      const docRef = doc(db, 'users', firebaseUser.uid);
+      const userSnap = await getDoc(docRef);
+
+      if (userSnap.exists()) {
+        setUser(userSnap.data() as User);
+      }
+    } else {
+      setUser(null);
+    }
+  });
+
+  return unsubscribe;
+}, [visible]);
+
 
   return (
     <Animated.View style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}>

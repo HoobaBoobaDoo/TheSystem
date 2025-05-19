@@ -9,22 +9,29 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "1.23.1",
+    "@expo/config-plugins": "~9.0.0",
+    "@expo/prebuild-config": "^8.0.0",
+    "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-firebase/app": "^22.2.0",
+    "@react-native-firebase/auth": "^22.2.0",
+    "@react-native-firebase/firestore": "^22.2.0",
     "expo": "~52.0.46",
     "expo-font": "~13.0.4",
     "expo-router": "~4.0.21",
     "expo-status-bar": "~2.0.1",
+    "firebase": "^11.7.0",
     "react": "18.3.1",
     "react-native": "0.76.9",
+    "react-native-dotenv": "^3.4.11",
     "react-native-draggable-flatlist": "^4.0.3",
     "react-native-gesture-handler": "~2.20.2",
-    "react-native-reanimated": "~3.16.1",
-    "@expo/config-plugins": "~9.0.0",
-    "@expo/prebuild-config": "^8.0.0"
+    "react-native-reanimated": "~3.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/node": "^22.15.19",
     "@types/react": "~18.3.12",
+    "@types/react-native": "^0.73.0",
     "typescript": "^5.3.3"
   },
   "private": true

@@ -1,30 +1,30 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getCurrentUser } from '../utils/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '../utils/firebaseConfig';
+
 
 export default function ProfileCreatedScreen() {
   const router = useRouter();
   const { rank, productivity, class: selectedClass, username } = useLocalSearchParams();
 
   useEffect(() => {
-    const finalize = async () => {
-      const user = await getCurrentUser();
-      if (!user) return;
+  const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    if (!firebaseUser) return;
 
-      const updatedUser = {
-        ...user,
-        rank: rank as string,
-        class: selectedClass as string,
-        productivity: JSON.parse(productivity as string),
-      };
+    const ref = doc(db, 'users', firebaseUser.uid);
+    await updateDoc(ref, {
+      rank: rank as string,
+      class: selectedClass as string,
+      productivity: JSON.parse(productivity as string),
+    });
+  });
 
-      await AsyncStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    };
+  return unsubscribe;
+}, []);
 
-    finalize();
-  }, []);
 
   return (
     <View style={styles.container}>

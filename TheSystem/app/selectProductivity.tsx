@@ -12,7 +12,7 @@ const options = [
 export default function ClassScreen() {
   const [selected, setSelected] = useState<string[]>([]);
   const router = useRouter();
-  const { rank, username, fullName, email, password } = useLocalSearchParams();
+  const { rank } = useLocalSearchParams();
 
   const toggleSelect = (option: string) => {
     setSelected(prev =>
@@ -20,6 +20,18 @@ export default function ClassScreen() {
         ? prev.filter(item => item !== option)
         : [...prev, option]
     );
+  };
+
+  const goNext = () => {
+    if (selected.length === 0) return;
+
+    router.push({
+      pathname: '/selectClass',
+      params: {
+        rank: rank as string,
+        productivity: JSON.stringify(selected),
+      },
+    });
   };
 
   return (
@@ -37,21 +49,7 @@ export default function ClassScreen() {
 
       <TouchableOpacity
         style={[styles.nextButton, selected.length === 0 && styles.disabled]}
-        onPress={() => {
-          if (selected.length > 0) {
-            router.push({
-              pathname: '/selectClass',
-              params: {
-                rank: rank as string,
-                productivity: JSON.stringify(selected),
-                username,
-                fullName,
-                email,
-                password,
-              },
-            });
-          }
-        }}
+        onPress={goNext}
       >
         <Text style={styles.nextText}>Next</Text>
       </TouchableOpacity>

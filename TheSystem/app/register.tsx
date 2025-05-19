@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { registerUser } from '../utils/auth';
+import { registerUser } from '../utils/registerUser';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -12,26 +19,7 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.welcome}>Register now!</Text>
-
-        <Text style={styles.label}>Username:</Text>
-        <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="Your username" />
-
-        <Text style={styles.label}>Full Name:</Text>
-        <TextInput style={styles.input} value={fullName} onChangeText={setFullName} placeholder="Your full name" />
-
-        <Text style={styles.label}>E-mail:</Text>
-        <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Enter your email" />
-
-        <Text style={styles.label}>Password:</Text>
-        <TextInput style={styles.input} value={password} onChangeText={setPassword} placeholder="Enter your password" secureTextEntry />
-
-        <TouchableOpacity
-  style={styles.loginButton}
-  onPress={async () => {
+  const handleRegister = async () => {
     const baseUser = {
       username,
       fullName,
@@ -42,19 +30,65 @@ export default function RegisterScreen() {
       class: '',
       tags: [],
       todos: [],
+      level: 1,
     };
 
-    await registerUser(baseUser);
-    router.push({
-      pathname: '/selectRank',
-      params: {
-        username,
-      },
-    });
-  }}
->
-  <Text style={styles.loginButtonText}>Register</Text>
-</TouchableOpacity>
+    const error = await registerUser(baseUser);
+
+    if (error) {
+      Alert.alert('Registration failed', error);
+    } else {
+      setTimeout(() => {
+  router.replace({
+    pathname: '/selectRank',
+    params: { username },
+  });
+}, 500);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.welcome}>Register now!</Text>
+
+        <Text style={styles.label}>Username:</Text>
+        <TextInput
+          style={styles.input}
+          value={username}
+          onChangeText={setUsername}
+          placeholder="Your username"
+        />
+
+        <Text style={styles.label}>Full Name:</Text>
+        <TextInput
+          style={styles.input}
+          value={fullName}
+          onChangeText={setFullName}
+          placeholder="Your full name"
+        />
+
+        <Text style={styles.label}>E-mail:</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Enter your email"
+          autoCapitalize="none"
+        />
+
+        <Text style={styles.label}>Password:</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Enter your password"
+          secureTextEntry
+        />
+
+        <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
+          <Text style={styles.loginButtonText}>Register</Text>
+        </TouchableOpacity>
 
         <View style={styles.iconRow}>
           {[...Array(4)].map((_, index) => (
@@ -62,13 +96,19 @@ export default function RegisterScreen() {
           ))}
         </View>
 
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.signupText}>No account? Make one here!</Text>
+        <TouchableOpacity
+          style={styles.signupButton}
+          onPress={() => router.push('/login')}
+        >
+          <Text style={styles.signupText}>
+            Already have an account? Log in here.
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 
 
 const styles = StyleSheet.create({

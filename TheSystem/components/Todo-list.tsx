@@ -1,6 +1,4 @@
 import React, { useState, useRef } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {
   View,
   Text,
@@ -12,6 +10,8 @@ import {
 } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import { doc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '../utils/firebaseConfig';
 
 type Props = {
   todos: string[];
@@ -25,64 +25,57 @@ export default function TodoList({ todos, setTodos }: Props) {
     item: string;
     index: number;
   } | null>(null);
-
   const inputRef = useRef<TextInput>(null);
 
-const handleDelete = async (index: number) => {
-  const removed = todos[index];
-  const updated = [...todos];
-  updated.splice(index, 1);
-  setTodos(updated);
-  setLastDeleted({ item: removed, index });
-  await AsyncStorage.setItem('todos', JSON.stringify(updated));
-};
+  const syncWithFirestore = async (updatedTodos: string[]) => {
+    const user = auth.currentUser;
+    if (!user) return;
+    await updateDoc(doc(db, 'users', user.uid), { todos: updatedTodos });
+  };
 
-const handleUndo = async () => {
-  if (!lastDeleted) return;
-  const updated = [...todos];
-  updated.splice(lastDeleted.index, 0, lastDeleted.item);
-  setTodos(updated);
-  setLastDeleted(null);
-  await AsyncStorage.setItem('todos', JSON.stringify(updated));
-};
+  const handleDelete = async (index: number) => {
+    const removed = todos[index];
+    const updated = [...todos];
+    updated.splice(index, 1);
+    setTodos(updated);
+    setLastDeleted({ item: removed, index });
+    await syncWithFirestore(updated);
+  };
 
+  const handleUndo = async () => {
+    if (!lastDeleted) return;
+    const updated = [...todos];
+    updated.splice(lastDeleted.index, 0, lastDeleted.item);
+    setTodos(updated);
+    setLastDeleted(null);
+    await syncWithFirestore(updated);
+  };
 
   const handleLongPress = (index: number) => {
     setEditingIndex(index);
     setEditingText(todos[index]);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (editingIndex === null) return;
     const updated = [...todos];
     updated[editingIndex] = editingText.trim();
     setTodos(updated);
     setEditingIndex(null);
     Keyboard.dismiss();
+    await syncWithFirestore(updated);
   };
 
   const renderLeftActions = (index: number) => (
-    <Pressable
-      onPress={() => handleDelete(index)}
-      style={styles.deleteButton}
-    >
+    <Pressable onPress={() => handleDelete(index)} style={styles.deleteButton}>
       <Ionicons name="trash" size={28} color="white" />
     </Pressable>
   );
 
   const renderRightActions = (index: number) => (
     <Pressable
-      onPress={async () => {
-  const removed = todos[index];
-  const updated = [...todos];
-  updated.splice(index, 1);
-  setTodos(updated);
-  setLastDeleted({ item: removed, index });
-  await AsyncStorage.setItem('todos', JSON.stringify(updated));
-}}
+      onPress={() => handleDelete(index)}
       style={styles.completeButton}
     >
       <Ionicons name="checkmark-done" size={28} color="white" />
@@ -158,6 +151,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 60,
+    backgroundColor: '#e74c3c',
     borderRadius: 6,
     marginVertical: 5,
     marginRight: 6,
@@ -166,6 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 60,
+    backgroundColor: '#2ecc71',
     borderRadius: 6,
     marginVertical: 5,
     marginLeft: 6,

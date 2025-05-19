@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -5,28 +6,45 @@ import {
   ScrollView,
   ImageBackground,
 } from 'react-native';
-import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
 import TypingText from '@components/TypingText';
-import React, { useEffect, useState } from 'react';
+import GoalCard from '@components/GoalCard';
 import AddItem from '@components/AddItem';
 import TodoList from '@components/Todo-list';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from '../utils/firebaseConfig';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default function HomeScreen() {
   const router = useRouter();
   const [todos, setTodos] = useState<string[]>([]);
 
   useEffect(() => {
-    AsyncStorage.getItem('todos').then((data) => {
-      if (data) setTodos(JSON.parse(data));
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) return;
+
+      const ref = doc(db, 'users', firebaseUser.uid);
+      const snap = await getDoc(ref);
+
+      if (snap.exists()) {
+        const data = snap.data();
+        setTodos(data.todos || []);
+      }
     });
+
+    return unsubscribe;
   }, []);
 
   const addTodo = async (text: string) => {
     const updated = [...todos, text];
     setTodos(updated);
-    await AsyncStorage.setItem('todos', JSON.stringify(updated));
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    await updateDoc(doc(db, 'users', user.uid), {
+      todos: updated,
+    });
   };
 
   return (
@@ -88,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   todoScroll: {
-    maxHeight: 200, // 👈 Set this based on your design needs
+    maxHeight: 200,
     marginBottom: 10,
   },
   todoContent: {

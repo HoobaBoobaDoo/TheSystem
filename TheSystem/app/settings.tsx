@@ -1,35 +1,40 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import TypingText from '@components/TypingText';
-import { useRouter } from 'expo-router';
-import { logoutUser } from '../utils/auth';
+import React from "react";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import TypingText from "@components/TypingText";
+import { useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebaseConfig";
 
 export default function SettingsScreen() {
   const router = useRouter();
 
   const settingsOptions = [
-    { label: 'Account', route: '/settings/account' },
-    { label: 'Notifications', route: '/settings/notifications' },
-    { label: 'Privacy', route: '/settings/privacy' },
-    { label: 'Appearance', route: '/settings/appearance' },
-    { label: 'About', route: '/settings/about' },
-    { label: 'Logout', route: 'logout' },
+    { label: "Account", route: "/settings/account" },
+    { label: "Notifications", route: "/settings/notifications" },
+    { label: "Privacy", route: "/settings/privacy" },
+    { label: "Appearance", route: "/settings/appearance" },
+    { label: "About", route: "/settings/about" },
+    { label: "Logout", route: "logout" },
   ];
 
   const handlePress = (item: { label: string; route: string }) => {
-    if (item.route === 'logout') {
-      Alert.alert('Log out', 'Are you sure you want to log out?', [
+    if (item.route === "logout") {
+      Alert.alert("Log out", "Are you sure you want to log out?", [
         {
-          text: 'Cancel',
-          style: 'cancel',
+          text: "Cancel",
+          style: "cancel",
         },
         {
-          text: 'Log out',
-          style: 'destructive',
+          text: "Log out",
+          style: "destructive",
           onPress: async () => {
-            await logoutUser();
-            router.replace('/login');
+            try {
+              await signOut(auth);
+              router.replace("/login");
+            } catch (error: any) {
+              Alert.alert("Logout failed", error.message);
+            }
           },
         },
       ]);
@@ -60,28 +65,28 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   list: {
     gap: 12,
   },
   option: {
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
     borderRadius: 6,
     paddingVertical: 14,
     paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   optionText: {
     fontSize: 16,
-    color: '#000',
+    color: "#000",
   },
 });

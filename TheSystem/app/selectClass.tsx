@@ -1,13 +1,39 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Alert } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { auth, db } from '../utils/firebaseConfig';
+import { doc, updateDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const classes = ['Knight', 'Mage', 'Rogue', 'Archer', 'Healer', 'Assassin'];
 
 export default function SelectClassScreen() {
   const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
-  const { rank, productivity, username, fullName, email, password } = useLocalSearchParams();
+  const { rank, productivity } = useLocalSearchParams();
+
+  const finishProfile = () => {
+    if (!selected) return;
+
+    onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) {
+        Alert.alert('Error', 'User not logged in.');
+        return;
+      }
+
+      try {
+        await updateDoc(doc(db, 'users', firebaseUser.uid), {
+          rank: rank as string,
+          productivity: JSON.parse(productivity as string),
+          class: selected,
+        });
+
+        router.push('/profileCreated');
+      } catch (error: any) {
+        Alert.alert('Error updating profile', error.message);
+      }
+    });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -27,28 +53,14 @@ export default function SelectClassScreen() {
 
       <TouchableOpacity
         style={[styles.nextButton, !selected && styles.disabled]}
-        onPress={() => {
-          if (selected) {
-            router.push({
-              pathname: '/profileCreated',
-              params: {
-                username: username as string,
-                fullName: fullName as string,
-                email: email as string,
-                password: password as string,
-                rank: rank as string,
-                productivity: productivity as string,
-                class: selected,
-              },
-            });
-          }
-        }}
+        onPress={finishProfile}
       >
         <Text style={styles.nextText}>Finish hunter profile</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
