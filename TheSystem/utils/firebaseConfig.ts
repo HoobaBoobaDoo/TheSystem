@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { initializeFirestore } from 'firebase/firestore';
+import {
+  initializeFirestore,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY!,
@@ -13,10 +15,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+// ✅ Use default in-memory auth
+const auth = getAuth(app);
+
+// ✅ Force Firestore to use long polling to avoid transport errors
 const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
+  // @ts-ignore: allow untyped option for React Native fix
+  useFetchStreams: false,
 });
-
-const auth = getAuth(app);
 
 export { auth, db };

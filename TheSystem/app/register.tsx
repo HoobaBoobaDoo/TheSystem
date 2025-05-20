@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { registerUser } from '../utils/registerUser';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -35,17 +36,21 @@ export default function RegisterScreen() {
 
     const error = await registerUser(baseUser);
 
-    if (error) {
-      Alert.alert('Registration failed', error);
-    } else {
-      setTimeout(() => {
-  router.replace({
-    pathname: '/selectRank',
-    params: { username },
-  });
-}, 500);
+if (error) {
+  Alert.alert('Registration failed', error);
+} else {
+  const auth = getAuth();
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      unsubscribe(); // stop listening once we got the user
+      router.replace({
+        pathname: '/selectRank',
+        params: { username },
+      });
     }
-  };
+  });
+}
+}
 
   return (
     <View style={styles.container}>
