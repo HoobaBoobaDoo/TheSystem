@@ -4,7 +4,9 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
 import React, { useState, useEffect } from 'react';
-import { getCurrentUser, User } from '../utils/auth';
+
+import { getCurrentUser } from '../utils/auth';
+import { User } from '../types/User';
 
 export default function ProfileScreen() {
   const router = useRouter();

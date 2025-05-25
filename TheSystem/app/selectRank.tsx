@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  ImageBackground,
+  Alert,
+} from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const options = [
@@ -15,59 +23,86 @@ export default function SelectRankScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
+  const handleNext = () => {
+    if (!selected) {
+      Alert.alert('Select a rank', 'Please choose a rank to continue.');
+      return;
+    }
+
+    router.push({
+      pathname: '/selectProductivity',
+      params: {
+        ...params,
+        rank: selected,
+      },
+    });
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.question}>How serious are you about productivity?</Text>
-      {options.map((option, index) => (
-        <TouchableOpacity
-          key={index}
-          style={[styles.option, selected === option.value && styles.selected]}
-          onPress={() => setSelected(option.value)}
-        >
-          <Text>{option.label}</Text>
-        </TouchableOpacity>
-      ))}
-      <TouchableOpacity
-        style={[styles.nextButton, !selected && styles.disabled]}
-        onPress={() => {
-          if (selected) {
-            router.push({
-              pathname: '/selectProductivity',
-              params: {
-                ...params,
-                rank: selected,
-              },
-            });
-          }
-        }}
-      >
-        <Text style={styles.nextText}>Next</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <ImageBackground
+      source={require('../assets/neon_room.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.overlay}>
+          <Text style={styles.question}>How serious are you about productivity?</Text>
+
+          {options.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={[styles.option, selected === option.value && styles.selected]}
+              onPress={() => setSelected(option.value)}
+            >
+              <Text style={{ color: '#fff' }}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
+
+          <TouchableOpacity
+            style={[styles.nextButton, !selected && styles.disabled]}
+            onPress={handleNext}
+          >
+            <Text style={styles.nextText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
     paddingTop: 60,
   },
-  question: {
-    fontSize: 16,
+  
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 12,
+    borderRadius: 10,
     marginBottom: 20,
   },
+  question: {
+    fontSize: 28,
+    marginBottom: 20,
+    color: '#fff',
+  },
   option: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'rgba(138, 159, 165, 0.7)',
     padding: 12,
     borderRadius: 6,
     marginBottom: 12,
   },
   selected: {
-    backgroundColor: '#aaa',
+    backgroundColor: 'rgba(138, 159, 165, 1)',
   },
   nextButton: {
     marginTop: 20,
-    backgroundColor: '#888',
+    backgroundColor: 'rgba(138, 159, 165, 0.9)',
     padding: 12,
     borderRadius: 6,
     alignItems: 'center',
@@ -76,6 +111,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   nextText: {
+    fontSize: 18,
     color: '#fff',
   },
 });

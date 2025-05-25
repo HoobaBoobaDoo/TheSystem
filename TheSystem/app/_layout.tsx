@@ -32,7 +32,10 @@ export default function Layout() {
   useEffect(() => {
     const checkAuth = async () => {
       const user = await getCurrentUser();
-      if (!user && !onAuthScreen) {
+      const isIncomplete =
+        !user?.rank || !user?.class || !user?.productivity;
+
+      if ((!user || isIncomplete) && !onAuthScreen) {
         router.replace('/login');
       }
     };
@@ -42,7 +45,11 @@ export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Header onMenuPress={() => setSidebarVisible(true)} navigate={navigate} />
-      <Sidebar visible={sidebarVisible} onClose={() => setSidebarVisible(false)} navigate={navigate} />
+      <Sidebar
+        visible={sidebarVisible}
+        onClose={() => setSidebarVisible(false)}
+        navigate={navigate}
+      />
 
       <View style={{ flex: 1 }}>
         <Stack

@@ -1,23 +1,50 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  Alert,
+} from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { getCurrentUser } from '../utils/auth';
+import { User } from '../types/User';
 
 export default function ProfileCreatedScreen() {
   const router = useRouter();
-  const { rank, productivity, class: selectedClass, username } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+
+  const rank = params.rank as string;
+  const productivity = params.productivity as string;
+  const selectedClass = params.class as string;
+  const username = params.username as string;
 
   useEffect(() => {
     const finalize = async () => {
       const user = await getCurrentUser();
-      if (!user) return;
+      if (!user) {
+        console.warn('No current user found');
+        return;
+      }
 
-      const updatedUser = {
+      let parsedProductivity: string[] = [];
+
+      try {
+        parsedProductivity = JSON.parse(productivity);
+        if (!Array.isArray(parsedProductivity)) throw new Error('Invalid structure');
+      } catch (e) {
+        console.error('Failed to parse productivity:', e);
+        parsedProductivity = [];
+      }
+
+      const updatedUser: User = {
         ...user,
-        rank: rank as string,
-        class: selectedClass as string,
-        productivity: JSON.parse(productivity as string),
+        rank,
+        class: selectedClass,
+        productivity: parsedProductivity,
       };
 
       await AsyncStorage.setItem('currentUser', JSON.stringify(updatedUser));
@@ -27,16 +54,26 @@ export default function ProfileCreatedScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Profile created!</Text>
-      <Text style={styles.text}>
-        Welcome {rank} hunter <Text style={styles.highlight}>{username ?? ''}</Text>!
-      </Text>
+    <ImageBackground
+      source={require('../assets/neon_room.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <Text style={styles.text}>Profile created!</Text>
+        <Text style={styles.text}>
+          Welcome {rank ?? ''} hunter{' '}
+          <Text style={styles.highlight}>{username ?? 'Unknown hunter'}</Text>!
+        </Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
-        <Text style={styles.buttonText}>Finish profile</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.replace('/')}
+        >
+          <Text style={styles.buttonText}>Finish profile</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -46,17 +83,27 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     alignItems: 'center',
   },
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
   text: {
-    fontSize: 14,
+    fontSize: 28,
     marginBottom: 10,
     textAlign: 'center',
+    color: '#fff',
   },
   highlight: {
     fontWeight: 'bold',
   },
   button: {
     marginTop: 30,
-    backgroundColor: '#888',
+    backgroundColor: 'rgba(138, 159, 165, 0.8)',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 6,

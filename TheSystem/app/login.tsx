@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { loginUser } from '../utils/auth';
 
 export default function LoginScreen() {
+  
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -20,9 +21,16 @@ export default function LoginScreen() {
   };
 
   return (
+    <ImageBackground
+        source={require('../assets/neon_room.jpeg')}
+        style={styles.background}
+        resizeMode="cover"
+      >
     <View style={styles.container}>
+      
+              <View style={styles.overlay}>
       <View style={styles.content}>
-        <Text style={styles.welcome}>Welcome back!</Text>
+        <Text style={styles.welcome}>Welcome hunter!</Text>
 
         <Text style={styles.label}>E-mail:</Text>
         <TextInput
@@ -56,7 +64,9 @@ export default function LoginScreen() {
           <Text style={styles.signupText}>No account? Make one here!</Text>
         </TouchableOpacity>
       </View>
+      </View>
     </View>
+    </ImageBackground>
   );
 }
 
@@ -64,9 +74,17 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     paddingTop: 40,
     height: '100%',
+  },
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 20,
   },
   header: {
     flexDirection: 'row',
@@ -84,21 +102,24 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   welcome: {
-    fontSize: 16,
+    fontSize: 30,
     marginBottom: 20,
+    color: '#fff',
   },
   label: {
     fontSize: 14,
     marginBottom: 4,
+    color: '#fff',
   },
   input: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'rgba(138, 159, 165, 0.6)',
     borderRadius: 6,
     padding: 10,
     marginBottom: 16,
+    color: '#fff',
   },
   loginButton: {
-    backgroundColor: '#888',
+    backgroundColor: 'rgba(138, 159, 165, 0.9)',
     paddingVertical: 12,
     borderRadius: 6,
     alignItems: 'center',
@@ -116,13 +137,13 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 40,
     height: 40,
-    backgroundColor: '#aaa',
+    backgroundColor: 'rgba(138, 159, 165, 0.8)',
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   signupButton: {
-    backgroundColor: '#aaa',
+    backgroundColor: 'rgba(138, 159, 165, 0.9)',
     paddingVertical: 12,
     borderRadius: 6,
     alignItems: 'center',
