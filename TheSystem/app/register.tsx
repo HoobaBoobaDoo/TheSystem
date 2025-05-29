@@ -39,7 +39,14 @@ export default function RegisterScreen() {
   todos: [],
   level: 1,
   productivity: [],
+  stats: {
+    steps: 0,
+    pushups: 0,
+    dungeonTime: 10,
+    planking: 60,
+  },
 };
+
 
 
     const error = await registerUser(baseUser);

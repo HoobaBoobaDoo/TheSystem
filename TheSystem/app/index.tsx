@@ -12,21 +12,65 @@ import React, { useEffect, useState } from 'react';
 import AddItem from '@components/AddItem';
 import TodoList from '@components/Todo-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Pedometer } from 'expo-sensors';
+
+import { User } from "../types/User";
+import { getCurrentUser } from "../utils/auth";
 
 export default function HomeScreen() {
   const router = useRouter();
+
   const [todos, setTodos] = useState<string[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [stepCount, setStepCount] = useState(0);
+
+  const refresh = async () => {
+    const updated = await getCurrentUser();
+    if (updated) setUser(updated);
+  };
 
   useEffect(() => {
-    AsyncStorage.getItem('todos').then((data) => {
-      if (data) setTodos(JSON.parse(data));
-    });
+    const loadUser = async () => {
+      const current = await getCurrentUser();
+      if (current) {
+        setUser(current);
+        setTodos(current.todos);
+      }
+    };
+    loadUser();
   }, []);
 
+  useEffect(() => {
+    const subscription = Pedometer.watchStepCount(async (result) => {
+      setStepCount((prev) => {
+        const updated = prev + result.steps;
+        updateUserSteps(updated);
+        return updated;
+      });
+    });
+    return () => subscription?.remove();
+  }, []);
+
+  const updateUserSteps = async (newSteps: number) => {
+    const current = await getCurrentUser();
+    if (!current) return;
+    current.stats.steps = newSteps;
+    await AsyncStorage.setItem('currentUser', JSON.stringify(current));
+    setUser(current);
+  };
+
   const addTodo = async (text: string) => {
-    const updated = [...todos, text];
-    setTodos(updated);
-    await AsyncStorage.setItem('todos', JSON.stringify(updated));
+    if (!user) return;
+
+    const updatedTodos = [...user.todos, text];
+    const updatedUser: User = {
+      ...user,
+      todos: updatedTodos,
+    };
+
+    await AsyncStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    setTodos(updatedTodos);
+    setUser(updatedUser);
   };
 
   return (
@@ -53,10 +97,26 @@ export default function HomeScreen() {
 
         <View style={styles.overlay}>
           <View style={styles.cardGrid}>
-            <GoalCard top="999" bottom="steps" />
-            <GoalCard top="10" bottom="pushups" />
-            <GoalCard top="✓" bottom="planking" />
-            <GoalCard top="99 min" bottom="dungeon" />
+            <GoalCard
+              statKey="pushups"
+              value={user?.stats.pushups ?? 0}
+              label="pushups"
+              refresh={refresh}
+            />
+            <GoalCard
+              statKey="planking"
+              value={user?.stats.planking === 0 ? '✓' : `${user?.stats.planking}s`}
+              label="Daily planking"
+              refresh={refresh}
+            />
+            <GoalCard
+              value={`${user?.stats.steps ?? 0}`}
+              label="steps"
+            />
+            <GoalCard
+              value={`${user?.stats.dungeonTime ?? 0}s`}
+              label="in dungeon"
+            />
           </View>
         </View>
       </View>
@@ -88,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   todoScroll: {
-    maxHeight: 200, // 👈 Set this based on your design needs
+    maxHeight: 200,
     marginBottom: 10,
   },
   todoContent: {

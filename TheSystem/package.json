@@ -20,7 +20,10 @@
     "react-native-gesture-handler": "~2.20.2",
     "react-native-reanimated": "~3.16.1",
     "@expo/config-plugins": "~9.0.0",
-    "@expo/prebuild-config": "^8.0.0"
+    "@expo/prebuild-config": "^8.0.0",
+    "expo-image-picker": "~16.0.6",
+    "expo-sensors": "~14.0.2",
+    "expo-dev-client": "~5.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

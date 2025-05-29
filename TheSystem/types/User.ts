@@ -10,4 +10,11 @@ export type User = {
   level: number;
   profilePicture?: string;
   productivity?: string[];
+  stats: {
+  steps: number;
+  pushups: number;
+  dungeonTime: number;
+  planking: number;
+};
+
 };

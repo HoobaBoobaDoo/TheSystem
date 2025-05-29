@@ -2,7 +2,8 @@ import { View, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-
 import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
-import { getCurrentUser, User } from '../utils/auth';
+import { getCurrentUser } from '../utils/auth';
+import { User } from "../types/User";
 
 type SidebarProps = {
   visible: boolean;
@@ -19,7 +20,8 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
     { label: 'Profile', route: '/profile' },
     { label: 'Edit Dashboard', route: '/edit' },
     { label: 'Clan', route: '/clan' },
-    { label: 'Settings', route: '/settings' }
+    { label: 'Weekly Board', route: '/weekly' },
+    { label: 'Settings', route: '/settings' },
   ];
 
   useEffect(() => {

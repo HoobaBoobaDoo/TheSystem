@@ -65,9 +65,25 @@ export async function logoutUser(): Promise<void> {
 export async function getCurrentUser(): Promise<User | null> {
   try {
     const userRaw = await AsyncStorage.getItem('currentUser');
-    return userRaw ? JSON.parse(userRaw) : null;
+    if (!userRaw) return null;
+
+    const parsed: User = JSON.parse(userRaw);
+
+    // Voeg ontbrekende stats toe als fallback
+    if (!parsed.stats) {
+      parsed.stats = {
+        steps: 0,
+        pushups: 0,
+        dungeonTime: 10,
+        planking: 60,
+      };
+      await AsyncStorage.setItem('currentUser', JSON.stringify(parsed));
+    }
+
+    return parsed;
   } catch (error) {
     console.error('Error getting current user:', error);
     return null;
   }
 }
+
