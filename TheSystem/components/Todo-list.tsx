@@ -28,24 +28,38 @@ export default function TodoList({ todos, setTodos }: Props) {
 
   const inputRef = useRef<TextInput>(null);
 
-const handleDelete = async (index: number) => {
-  const removed = todos[index];
-  const updated = [...todos];
-  updated.splice(index, 1);
-  setTodos(updated);
-  setLastDeleted({ item: removed, index });
-  await AsyncStorage.setItem('todos', JSON.stringify(updated));
-};
+  // Helper to update AsyncStorage and state together
+  const updateTodosStorage = async (updatedTodos: string[]) => {
+    // Update AsyncStorage for 'currentUser' todos
+    try {
+      const currentUserString = await AsyncStorage.getItem('currentUser');
+      if (!currentUserString) return;
 
-const handleUndo = async () => {
-  if (!lastDeleted) return;
-  const updated = [...todos];
-  updated.splice(lastDeleted.index, 0, lastDeleted.item);
-  setTodos(updated);
-  setLastDeleted(null);
-  await AsyncStorage.setItem('todos', JSON.stringify(updated));
-};
+      const currentUser = JSON.parse(currentUserString);
+      currentUser.todos = updatedTodos;
 
+      await AsyncStorage.setItem('currentUser', JSON.stringify(currentUser));
+      setTodos(updatedTodos);
+    } catch (error) {
+      console.error('Error updating todos in storage', error);
+    }
+  };
+
+  const handleDelete = async (index: number) => {
+    const removed = todos[index];
+    const updated = [...todos];
+    updated.splice(index, 1);
+    setLastDeleted({ item: removed, index });
+    await updateTodosStorage(updated);
+  };
+
+  const handleUndo = async () => {
+    if (!lastDeleted) return;
+    const updated = [...todos];
+    updated.splice(lastDeleted.index, 0, lastDeleted.item);
+    setLastDeleted(null);
+    await updateTodosStorage(updated);
+  };
 
   const handleLongPress = (index: number) => {
     setEditingIndex(index);
@@ -55,13 +69,13 @@ const handleUndo = async () => {
     }, 50);
   };
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (editingIndex === null) return;
     const updated = [...todos];
     updated[editingIndex] = editingText.trim();
-    setTodos(updated);
     setEditingIndex(null);
     Keyboard.dismiss();
+    await updateTodosStorage(updated);
   };
 
   const renderLeftActions = (index: number) => (
@@ -75,14 +89,7 @@ const handleUndo = async () => {
 
   const renderRightActions = (index: number) => (
     <Pressable
-      onPress={async () => {
-  const removed = todos[index];
-  const updated = [...todos];
-  updated.splice(index, 1);
-  setTodos(updated);
-  setLastDeleted({ item: removed, index });
-  await AsyncStorage.setItem('todos', JSON.stringify(updated));
-}}
+      onPress={() => handleDelete(index)}
       style={styles.completeButton}
     >
       <Ionicons name="checkmark-done" size={28} color="white" />

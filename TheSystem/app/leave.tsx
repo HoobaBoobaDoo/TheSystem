@@ -1,35 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import TypingText from '@components/TypingText';
+import { getCurrentUser } from '../utils/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LeaveScreen() {
   const router = useRouter();
   const { next } = useLocalSearchParams();
   const nextRoute = typeof next === 'string' ? next : '/';
 
+  const [loading, setLoading] = useState(false);
+
+  const handleLeave = async () => {
+    setLoading(true);
+    const user = await getCurrentUser();
+    if (user) {
+      user.level = (user.level ?? 0) + 1;
+      await AsyncStorage.setItem('currentUser', JSON.stringify(user));
+    }
+    setLoading(false);
+    router.push(nextRoute);
+  };
+
   return (
     <ImageBackground
-                source={require('../assets/portal.jpeg')}
-                  style={styles.background}
-                  resizeMode="cover"
-                >
-    <View style={styles.container}>
-                  <View style={styles.overlay}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <View style={styles.content}>
-        <TypingText style={styles.header}>Are you sure you want to leave?</TypingText>
-        <TypingText style={styles.text}>You will fail this dungeon!</TypingText>
+      source={require('../assets/portal.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.overlay}>
+          <Stack.Screen options={{ headerShown: false }} />
+          <View style={styles.content}>
+            <TypingText style={styles.header}>Are you sure you want to leave?</TypingText>
+            <TypingText style={styles.text}>You will fail this dungeon!</TypingText>
+          </View>
+
+          <TouchableOpacity
+            style={[styles.button, loading && { opacity: 0.7 }]}
+            onPress={handleLeave}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="#000" />
+            ) : (
+              <TypingText style={styles.buttonText}>Leave dungeon</TypingText>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonCancel}
+            onPress={() => router.back()}
+            disabled={loading}
+          >
+            <TypingText style={styles.buttonText}>Go back</TypingText>
+          </TouchableOpacity>
+        </View>
       </View>
-      
-      <TouchableOpacity style={styles.button} onPress={() => router.push(nextRoute)}>
-        <TypingText style={styles.buttonText}>Leave dungeon</TypingText>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonCancel} onPress={() => router.back()}>
-        <TypingText style={styles.buttonText}>Go back</TypingText>
-      </TouchableOpacity>
-    </View>
-    </View>
     </ImageBackground>
   );
 }

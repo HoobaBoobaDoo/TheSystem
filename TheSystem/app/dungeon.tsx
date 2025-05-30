@@ -1,49 +1,137 @@
-import { View, Text, StyleSheet,TouchableOpacity, Button, ScrollView, ImageBackground } from 'react-native';
-import GoalDisplayCard from '@components/GoalDisplayCard';
-import PrimaryButton from '@components/PrimaryButton';
+import { View, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, RefreshControl } from 'react-native';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
 import TypingText from '@components/TypingText';
+import React, { useEffect, useState, useRef } from 'react';
+import TodoList from '@components/Todo-list';
+import AddItem from '@components/AddItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { User } from "../types/User";
+import { getCurrentUser } from "../utils/auth";
 
 export default function DungeonScreen() {
   const router = useRouter();
+
+  const [user, setUser] = useState<User | null>(null);
+  const [todos, setTodos] = useState<string[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const current = await getCurrentUser();
+      if (current) {
+        // Zorg dat dungeonTime minimaal 0 is
+        if (typeof current.stats.dungeonTime !== 'number') {
+          current.stats.dungeonTime = 0;
+        }
+        setUser(current);
+        setTodos(current.todos);
+      }
+    };
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Start timer om elke 60 seconden dungeonTime met 1 minuut te verhogen
+    timerRef.current = setInterval(async () => {
+      const current = await getCurrentUser();
+      if (!current) return;
+
+      const currentDungeonTime = typeof current.stats.dungeonTime === 'number' ? current.stats.dungeonTime : 0;
+      const newDungeonTime = Math.floor(currentDungeonTime) + 1; // Tel 1 minuut erbij
+
+      current.stats.dungeonTime = newDungeonTime;
+      await AsyncStorage.setItem('currentUser', JSON.stringify(current));
+      setUser(current);
+    }, 60000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [user]);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    const updated = await getCurrentUser();
+    if (updated) setUser(updated);
+    setRefreshing(false);
+  };
+
+  const addTodo = async (text: string) => {
+    if (!user) return;
+    const updatedTodos = [...user.todos, text];
+    const updatedUser: User = {
+      ...user,
+      todos: updatedTodos,
+    };
+
+    await AsyncStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    setTodos(updatedTodos);
+    setUser(updatedUser);
+  };
+
   return (
     <ImageBackground
-            source={require('../assets/portal.jpeg')}
-              style={styles.background}
-              resizeMode="cover"
-            >
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Goal Intentions */}
-            <View style={styles.overlay}>
-      <TypingText style={styles.label}>I will:</TypingText>
-      <GoalDisplayCard text="999 steps" />
-      <GoalDisplayCard text="10 pushups" />
-      <GoalDisplayCard text="Daily planking" />
-      <GoalDisplayCard text="99 minutes in dungeon" />
-
-      {/* Enter Dungeon Button */}
-      <TouchableOpacity 
-      style={styles.button} 
-      onPress={() => router.push('/leave')}
+      source={require('../assets/portal.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+        }
       >
-      <TypingText style={styles.buttonText}>Leave Dungeon</TypingText>
-    </TouchableOpacity>
+        {/* Goal Intentions */}
+        <View style={styles.overlay}>
+          <TypingText style={styles.label}>I will:</TypingText>
 
-      </View>
+          {/* Todo List */}
+          <ScrollView style={styles.todoScroll} contentContainerStyle={styles.todoContent}>
+            <TodoList todos={todos} setTodos={setTodos} />
+          </ScrollView>
 
-      {/* Progress / Stats Cards */}
-            <View style={styles.overlay}>
-      <View style={styles.cardGrid}>
-        <GoalCard top="999" bottom="steps" />
-        <GoalCard top="10" bottom="pushups" light />
-        <GoalCard top="✓" bottom="planking" />
-        <GoalCard top="99 min" bottom="dungeon" />
-      </View>
-      </ View>
-    </ScrollView>
-    </ ImageBackground>
+          {/* Leave Dungeon Button */}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.push('/leave')}
+          >
+            <TypingText style={styles.buttonText}>Leave Dungeon</TypingText>
+          </TouchableOpacity>
+        </View>
+
+        {/* Progress / Stats Cards */}
+        <View style={styles.overlay}>
+          <View style={styles.cardGrid}>
+            <GoalCard
+              statKey="pushups"
+              value={user?.stats.pushups ?? 0}
+              label="pushups"
+              refresh={refresh}
+            />
+            <GoalCard
+              statKey="planking"
+              value={user?.stats.planking === 0 ? '✓' : `${user?.stats.planking}s`}
+              label="Daily planking"
+              refresh={refresh}
+            />
+            <GoalCard
+              value={`${user?.stats.steps ?? 0}`}
+              label="steps"
+            />
+            <GoalCard
+              value={`${Math.floor(user?.stats.dungeonTime ?? 0)} min`}
+              label="in dungeon"
+            />
+          </View>
+        </View>
+      </ScrollView>
+      <AddItem onAdd={addTodo} />
+    </ImageBackground>
   );
 }
 
@@ -69,6 +157,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 35,
     color: '#fff',
+  },
+  todoScroll: {
+    maxHeight: 200,
+    marginBottom: 10,
+  },
+  todoContent: {
+    paddingRight: 6,
   },
   cardGrid: {
     flexDirection: 'row',

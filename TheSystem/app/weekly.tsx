@@ -13,6 +13,7 @@ import { getCurrentUser } from '../utils/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../types/User';
 import AddWeekly from '@components/AddWeekly';
+import TypingText from '@components/TypingText';
 
 type WeeklyTask = {
   label: string;
@@ -136,7 +137,7 @@ export default function WeeklyScreen() {
     return (
       <View key={category.name} style={styles.category}>
         <View style={styles.categoryHeader}>
-          <Text style={styles.categoryTitle}>{category.name} {percent}%</Text>
+          <TypingText style={styles.categoryTitle}>{category.name} {percent}%</TypingText>
           <TouchableOpacity onPress={() => removeCategory(category.name)}>
             <Ionicons name="close" size={20} color="white" />
           </TouchableOpacity>
@@ -147,9 +148,9 @@ export default function WeeklyScreen() {
 
         {[...category.tasks.filter(t => !t.done), ...category.tasks.filter(t => t.done)].map((task, i) => (
           <View key={i} style={styles.subTask}>
-            <Text style={[styles.subLabel, task.done && styles.strikethrough]}>
+            <TypingText style={[styles.subLabel, task.done && styles.strikethrough]}>
               {task.label}
-            </Text>
+            </TypingText>
             <View style={styles.actionButtons}>
               {!task.done && (
                 <TouchableOpacity onPress={() => markDone(category.name, i)}>
@@ -172,7 +173,7 @@ export default function WeeklyScreen() {
           placeholderTextColor="#aaa"
         />
         <TouchableOpacity onPress={addTask} style={styles.addButton}>
-          <Text style={styles.addText}>Add new</Text>
+          <TypingText style={styles.addText}>Add new</TypingText>
         </TouchableOpacity>
       </View>
     );

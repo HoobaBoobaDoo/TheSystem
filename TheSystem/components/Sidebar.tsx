@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Animated, Dimensions, Image } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
@@ -58,14 +58,25 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
       </View>
 
       <View style={styles.footer}>
-        <View>
+        {user?.profilePicture ? (
+          <Image source={{ uri: user.profilePicture }} style={styles.avatar} />
+        ) : (
+          <Ionicons name="person-circle-outline" size={32} style={styles.white} />
+        )}
+        <View style={styles.userInfo}>
           <TypingText style={styles.name}>{user?.fullName || 'Display naam'}</TypingText>
           <TypingText style={styles.username}>@{user?.username || 'username'}</TypingText>
         </View>
-        <Ionicons name="person-circle-outline" size={32} style={styles.white} />
       </View>
 
-      <TypingText style={styles.logo}>The System Logo</TypingText>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../assets/TheSystem-Icon.png')} // pas dit pad aan naar jouw logo image
+          style={styles.logoImage}
+          resizeMode="contain"
+        />
+        <TypingText style={styles.logoText}>TheSystem</TypingText>
+      </View>
     </Animated.View>
   );
 }
@@ -102,6 +113,9 @@ const styles = StyleSheet.create({
     borderTopColor: '#eee',
     paddingTop: 20,
   },
+  userInfo: {
+    marginLeft: 10,
+  },
   name: {
     fontWeight: 'bold',
     color: '#fff',
@@ -110,12 +124,28 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: '#fff',
   },
-  logo: {
-    textAlign: 'center',
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 16,
+  },
+  logoImage: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
+  },
+  logoText: {
     color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   white: {
     color: '#fff',
+  },
+  avatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
   },
 });

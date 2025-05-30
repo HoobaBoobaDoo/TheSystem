@@ -42,7 +42,7 @@ export default function RegisterScreen() {
   stats: {
     steps: 0,
     pushups: 0,
-    dungeonTime: 10,
+    dungeonTime: 0,
     planking: 60,
   },
 };

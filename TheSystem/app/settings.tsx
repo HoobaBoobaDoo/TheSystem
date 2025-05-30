@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
 import { useRouter } from 'expo-router';
 import { logoutUser } from '../utils/auth';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 export default function SettingsScreen() {
   const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();
+      if (!hasHardware) {
+        Alert.alert('Biometric authentication not supported on this device.');
+        router.replace('/login');
+        return;
+      }
+      const savedCredentials = await LocalAuthentication.isEnrolledAsync();
+      if (!savedCredentials) {
+        Alert.alert('No biometric credentials enrolled.');
+        router.replace('/login');
+        return;
+      }
+
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Authenticate to access Settings',
+        fallbackLabel: 'Use Passcode',
+        disableDeviceFallback: false,
+      });
+
+      if (!result.success) {
+        Alert.alert('Authentication failed. Access denied.');
+        router.replace('/login');
+      }
+    })();
+  }, []);
 
   const settingsOptions = [
     { label: 'Account', route: '/settings/account' },

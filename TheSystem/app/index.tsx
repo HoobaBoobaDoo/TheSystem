@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageBackground,
+  RefreshControl,
 } from 'react-native';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
@@ -23,10 +24,17 @@ export default function HomeScreen() {
   const [todos, setTodos] = useState<string[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [stepCount, setStepCount] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   const refresh = async () => {
     const updated = await getCurrentUser();
     if (updated) setUser(updated);
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refresh();
+    setTimeout(() => setRefreshing(false), 800);
   };
 
   useEffect(() => {
@@ -83,7 +91,13 @@ export default function HomeScreen() {
         <View style={styles.overlay}>
           <TypingText style={styles.label}>I will:</TypingText>
 
-          <ScrollView style={styles.todoScroll} contentContainerStyle={styles.todoContent}>
+          <ScrollView
+            style={styles.todoScroll}
+            contentContainerStyle={styles.todoContent}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             <TodoList todos={todos} setTodos={setTodos} />
           </ScrollView>
 
@@ -114,7 +128,7 @@ export default function HomeScreen() {
               label="steps"
             />
             <GoalCard
-              value={`${user?.stats.dungeonTime ?? 0}s`}
+              value={`${user?.stats.dungeonTime ?? 0}`}
               label="in dungeon"
             />
           </View>
