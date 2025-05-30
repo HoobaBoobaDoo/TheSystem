@@ -10,11 +10,17 @@ export type User = {
   level: number;
   profilePicture?: string;
   productivity?: string[];
+  weeklies?: {
+    name: string;
+    tasks: {
+      label: string;
+      done?: boolean;
+    }[];
+  }[];
   stats: {
-  steps: number;
-  pushups: number;
-  dungeonTime: number;
-  planking: number;
-};
-
+    steps: number;
+    pushups: number;
+    dungeonTime: number;
+    planking: number;
+  };
 };

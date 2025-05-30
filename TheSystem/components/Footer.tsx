@@ -21,7 +21,7 @@ export default function FooterTabs({ navigate }: FooterTabsProps) {
         <Ionicons name="people-outline" size={24} color="#fff" />
         <Text style={[styles.tabText, current === '/clan' && styles.active]}>Clan</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tab} onPress={() => navigate('/profile')}>
+      <TouchableOpacity style={styles.tab} onPress={() => navigate('/weekly')}>
         <Ionicons name="calendar-outline" size={24} color="#fff" />
         <Text style={[styles.tabText, current === '/weekly' && styles.active]}>Weekly</Text>
       </TouchableOpacity>
