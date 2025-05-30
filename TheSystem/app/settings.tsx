@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
 import { useRouter } from 'expo-router';
@@ -43,10 +43,11 @@ export default function SettingsScreen() {
     { label: 'Privacy', route: '/settings/privacy' },
     { label: 'Appearance', route: '/settings/appearance' },
     { label: 'About', route: '/settings/about' },
+    { label: 'Share App', route: 'share' }, // Nieuw
     { label: 'Logout', route: 'logout' },
   ];
 
-  const handlePress = (item: { label: string; route: string }) => {
+  const handlePress = async (item: { label: string; route: string }) => {
     if (item.route === 'logout') {
       Alert.alert('Log out', 'Are you sure you want to log out?', [
         {
@@ -62,6 +63,16 @@ export default function SettingsScreen() {
           },
         },
       ]);
+    } else if (item.route === 'share') {
+      try {
+        await Share.share({
+          message: 'We should get productive together! https://thesystem.com',
+          url: 'https://thesystem.com',
+          title: 'TheSystem App',
+        });
+      } catch (error) {
+        Alert.alert('Error', 'Could not open share dialog.');
+      }
     } else {
       router.push(item.route);
     }

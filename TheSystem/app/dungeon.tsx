@@ -1,4 +1,14 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, RefreshControl } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ImageBackground,
+  RefreshControl,
+  AppState,
+  AppStateStatus,
+} from 'react-native';
+import * as Notifications from 'expo-notifications';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
 import TypingText from '@components/TypingText';
@@ -10,6 +20,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from "../types/User";
 import { getCurrentUser } from "../utils/auth";
 
+// Configure notification handler to show notifications in foreground properly
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,  // Laat notificatie zien als app open is
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function DungeonScreen() {
   const router = useRouter();
 
@@ -17,12 +36,82 @@ export default function DungeonScreen() {
   const [todos, setTodos] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const notificationIdRef = useRef<string | null>(null);
+  const appState = useRef<AppStateStatus>(AppState.currentState);
 
+  useEffect(() => {
+    // Vraag notificatie permissies aan bij mount
+    (async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        console.warn('Notification permissions not granted!');
+      }
+    })();
+  }, []);
+
+  // Luister app state veranderingen
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    return () => subscription.remove();
+  }, []);
+
+  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+    // Alleen notificatie sturen als app van actief naar achtergrond gaat
+    if (appState.current === 'active' && nextAppState.match(/inactive|background/)) {
+      if (!notificationIdRef.current) {
+        notificationIdRef.current = await sendLeaveNotification();
+        startLeaveTimeout();
+      }
+    }
+    // App komt terug naar voorgrond: annuleer notificatie en timer
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      cancelLeaveNotification();
+      clearLeaveTimeout();
+    }
+    appState.current = nextAppState;
+  };
+
+  const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startLeaveTimeout = () => {
+    leaveTimeoutRef.current = setTimeout(() => {
+      clearLeaveTimeout();
+      router.push('/leave');
+    }, 60000);
+  };
+  const clearLeaveTimeout = () => {
+    if (leaveTimeoutRef.current) {
+      clearTimeout(leaveTimeoutRef.current);
+      leaveTimeoutRef.current = null;
+    }
+  };
+
+  const sendLeaveNotification = async (): Promise<string | null> => {
+    const id = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Dungeon warning',
+        body: 'Je hebt 60 seconden om terug te keren naar de dungeon!',
+        sound: true,
+        priority: Notifications.AndroidNotificationPriority.HIGH,
+        sticky: false,
+      },
+      trigger: null, // direct versturen
+    });
+    return id;
+  };
+
+  const cancelLeaveNotification = async () => {
+    if (notificationIdRef.current) {
+      await Notifications.dismissNotificationAsync(notificationIdRef.current);
+      notificationIdRef.current = null;
+    }
+  };
+
+  // Laad user data
   useEffect(() => {
     const loadUser = async () => {
       const current = await getCurrentUser();
       if (current) {
-        // Zorg dat dungeonTime minimaal 0 is
         if (typeof current.stats.dungeonTime !== 'number') {
           current.stats.dungeonTime = 0;
         }
@@ -33,16 +122,15 @@ export default function DungeonScreen() {
     loadUser();
   }, []);
 
+  // Timer om elke minuut dungeonTime te verhogen
   useEffect(() => {
     if (!user) return;
-
-    // Start timer om elke 60 seconden dungeonTime met 1 minuut te verhogen
     timerRef.current = setInterval(async () => {
       const current = await getCurrentUser();
       if (!current) return;
 
       const currentDungeonTime = typeof current.stats.dungeonTime === 'number' ? current.stats.dungeonTime : 0;
-      const newDungeonTime = Math.floor(currentDungeonTime) + 1; // Tel 1 minuut erbij
+      const newDungeonTime = Math.floor(currentDungeonTime) + 1;
 
       current.stats.dungeonTime = newDungeonTime;
       await AsyncStorage.setItem('currentUser', JSON.stringify(current));
