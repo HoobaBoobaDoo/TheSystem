@@ -4,25 +4,39 @@
     "slug": "TheSystem",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/TheSystem-Icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "scheme": "thesystem",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/TheSystem-Icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/TheSystem-Icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.hoobabooba.TheSystem"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/TheSystem-Icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "100ccceb-10c8-4f60-8719-b1efb80f5735"
+      }
     }
   }
 }
