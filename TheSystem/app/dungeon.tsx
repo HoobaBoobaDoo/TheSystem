@@ -7,6 +7,7 @@ import {
   RefreshControl,
   AppState,
   AppStateStatus,
+  useWindowDimensions,
 } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import GoalCard from '@components/GoalCard';
@@ -31,6 +32,8 @@ Notifications.setNotificationHandler({
 
 export default function DungeonScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   const [user, setUser] = useState<User | null>(null);
   const [todos, setTodos] = useState<string[]>([]);
@@ -40,7 +43,6 @@ export default function DungeonScreen() {
   const appState = useRef<AppStateStatus>(AppState.currentState);
 
   useEffect(() => {
-    // Vraag notificatie permissies aan bij mount
     (async () => {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -169,17 +171,23 @@ export default function DungeonScreen() {
       resizeMode="cover"
     >
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={[
+          styles.container,
+          isLandscape && styles.containerLandscape,
+        ]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} />
         }
       >
         {/* Goal Intentions */}
-        <View style={styles.overlay}>
+        <View style={[styles.overlay, isLandscape && styles.overlayLandscape]}>
           <TypingText style={styles.label}>I will:</TypingText>
 
           {/* Todo List */}
-          <ScrollView style={styles.todoScroll} contentContainerStyle={styles.todoContent}>
+          <ScrollView
+            style={styles.todoScroll}
+            contentContainerStyle={styles.todoContent}
+          >
             <TodoList todos={todos} setTodos={setTodos} />
           </ScrollView>
 
@@ -193,7 +201,7 @@ export default function DungeonScreen() {
         </View>
 
         {/* Progress / Stats Cards */}
-        <View style={styles.overlay}>
+        <View style={[styles.overlay, isLandscape && styles.overlayLandscape]}>
           <View style={styles.cardGrid}>
             <GoalCard
               statKey="pushups"
@@ -228,6 +236,10 @@ const styles = StyleSheet.create({
     padding: 16,
     height: '100%',
   },
+  containerLandscape: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   background: {
     flex: 1,
     justifyContent: 'center',
@@ -239,6 +251,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     padding: 12,
     borderRadius: 10,
+  },
+  overlayLandscape: {
+    width: '48%',
+    marginTop: 0,
   },
   label: {
     marginBottom: 8,

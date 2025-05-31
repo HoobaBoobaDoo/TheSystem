@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, StyleSheet, Animated, Dimensions, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Animated, Dimensions, Image, ScrollView } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
@@ -42,20 +42,22 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
         <Ionicons name="close-outline" size={28} style={styles.white} />
       </TouchableOpacity>
 
-      <View style={styles.menu}>
-        {menuItems.map((item, i) => (
-          <TouchableOpacity
-            key={i}
-            style={styles.menuItem}
-            onPress={() => {
-              navigate(item.route);
-              onClose();
-            }}
-          >
-            <TypingText style={{ padding: 10 }}>{item.label}</TypingText>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <ScrollView style={styles.menuScroll}>
+        <View style={styles.menu}>
+          {menuItems.map((item, i) => (
+            <TouchableOpacity
+              key={i}
+              style={styles.menuItem}
+              onPress={() => {
+                navigate(item.route);
+                onClose();
+              }}
+            >
+              <TypingText style={{ padding: 10 }}>{item.label}</TypingText>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
 
       <View style={styles.footer}>
         {user?.profilePicture ? (
@@ -71,7 +73,7 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
 
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/TheSystem-Icon.png')} // pas dit pad aan naar jouw logo image
+          source={require('../assets/TheSystem-Icon.png')}
           style={styles.logoImage}
           resizeMode="contain"
         />
@@ -95,6 +97,9 @@ const styles = StyleSheet.create({
   closeButton: {
     alignSelf: 'flex-end',
   },
+  menuScroll: {
+    maxHeight: '65%', // of pas aan afhankelijk van hoeveel ruimte je wil
+  },
   menu: {
     marginTop: 40,
   },
@@ -108,6 +113,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 10,
     borderTopWidth: 1,
     borderTopColor: '#eee',
@@ -115,6 +121,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     marginLeft: 10,
+    justifyContent: 'center',
   },
   name: {
     fontWeight: 'bold',

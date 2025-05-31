@@ -1,38 +1,71 @@
 import React from 'react';
 import { Stack } from 'expo-router';
-import { View, Text, StyleSheet, Image, TouchableOpacity,ImageBackground } from 'react-native';
-import { FontAwesome6 } from '@expo/vector-icons';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  useWindowDimensions,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import TypingText from '@components/TypingText';
 
 export default function ConfirmScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
   return (
     <ImageBackground
-            source={require('../assets/portal.jpeg')}
-              style={styles.background}
-              resizeMode="cover"
-            >
-    <View style={styles.container}>
-              <View style={styles.overlay}>
-      <Stack.Screen options={{ headerShown: false }} />
+      source={require('../assets/portal.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={[styles.container, isLandscape && styles.containerLandscape]}>
+        <View style={[styles.overlay, isLandscape && styles.overlayLandscape]}>
+          <Stack.Screen options={{ headerShown: false }} />
 
-      <View style={styles.content}>
-        <TypingText style={styles.header}>Are you sure?</TypingText>
-        <TypingText style={styles.text}>In this mode you can't....</TypingText>
-        <TypingText style={styles.text}>   - Exit the page</TypingText>
-        <TypingText style={styles.text}>   - Exit the app</TypingText>
-        <TypingText style={styles.text}>If you do so, you will lose all fail this dungeon and lose all your dungeon progress!</TypingText>
+          <View style={[styles.content, isLandscape && styles.contentLandscape]}>
+            <View style={styles.textContainer}>
+              <TypingText style={[styles.header, isLandscape && styles.headerLandscape]}>
+                Are you sure?
+              </TypingText>
+              <TypingText style={[styles.text, isLandscape && styles.textLandscape]}>
+                In this mode you can't....
+              </TypingText>
+              <TypingText style={[styles.text, isLandscape && styles.textLandscape]}>
+                &nbsp;&nbsp;- Exit the page
+              </TypingText>
+              <TypingText style={[styles.text, isLandscape && styles.textLandscape]}>
+                &nbsp;&nbsp;- Exit the app
+              </TypingText>
+              <TypingText style={[styles.text, isLandscape && styles.textLandscape]}>
+                If you do so, you will lose all fail this dungeon and lose all your dungeon progress!
+              </TypingText>
+            </View>
+
+            <View style={[styles.buttonsContainer, isLandscape && styles.buttonsContainerLandscape]}>
+              <TouchableOpacity
+                style={[styles.button, isLandscape && styles.buttonLandscape]}
+                onPress={() => router.push('/dungeon')}
+              >
+                <TypingText style={[styles.buttonText, isLandscape && styles.buttonTextLandscape]}>
+                  Enter dungeon
+                </TypingText>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.buttonCancel, isLandscape && styles.buttonCancelLandscape]}
+                onPress={() => router.back()}
+              >
+                <TypingText style={[styles.buttonText, isLandscape && styles.buttonTextLandscape]}>
+                  Go back
+                </TypingText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/dungeon')}> 
-        <TypingText style={styles.buttonText}>Enter dungeon</TypingText>
-      </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonCancel} onPress={() => router.back()}>
-              <TypingText style={styles.buttonText}>Go back</TypingText>
-            </TouchableOpacity>
-    </View>
-    </View>
     </ImageBackground>
   );
 }
@@ -43,6 +76,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 40,
     height: '100%',
+  },
+  containerLandscape: {
+    paddingHorizontal: 40,
   },
   background: {
     flex: 1,
@@ -55,16 +91,24 @@ const styles = StyleSheet.create({
     padding: 12,
     height: '100%',
     borderRadius: 10,
+    justifyContent: 'space-between',
+  },
+  overlayLandscape: {
+    padding: 8,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
-  text: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: '#fff',
+  contentLandscape: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+    paddingRight: 20,
   },
   header: {
     fontSize: 50,
@@ -72,13 +116,38 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  headerLandscape: {
+    fontSize: 32,
+  },
+  text: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#fff',
+  },
+  textLandscape: {
+    fontSize: 14,
+  },
+  buttonsContainer: {
+    marginTop: 20,
+  },
+  buttonsContainerLandscape: {
+    marginTop: 0,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
+  },
   button: {
     alignSelf: 'center',
     backgroundColor: 'rgba(206, 220, 224, 0.8)',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 6,
-    marginBottom: 30,
+    marginBottom: 20,
+  },
+  buttonLandscape: {
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    marginBottom: 20,
   },
   buttonCancel: {
     alignSelf: 'center',
@@ -86,10 +155,16 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 6,
-    marginBottom: 30,
+  },
+  buttonCancelLandscape: {
+    paddingVertical: 8,
+    paddingHorizontal: 24,
   },
   buttonText: {
     color: '#fff',
     fontSize: 25,
+  },
+  buttonTextLandscape: {
+    fontSize: 18,
   },
 });

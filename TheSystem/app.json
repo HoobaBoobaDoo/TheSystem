@@ -21,6 +21,7 @@
         "foregroundImage": "./assets/TheSystem-Icon.png",
         "backgroundColor": "#000000"
       },
+      "orientation": "default",
       "package": "com.hoobabooba.TheSystem"
     },
     "web": {
