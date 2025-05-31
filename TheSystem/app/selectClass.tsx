@@ -4,14 +4,22 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image,
-  ScrollView,
   ImageBackground,
+  ScrollView,
   Alert,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-const classes = ['Knight', 'Mage', 'Rogue', 'Archer', 'Healer', 'Assassin'];
+const classes = [
+  { name: 'Knight', icon: 'shield-checkmark' as const },
+  { name: 'Mage', icon: 'flame' as const },
+  { name: 'Rogue', icon: 'eye-off' as const },
+  { name: 'Archer', icon: 'grid' as const },
+  { name: 'Healer', icon: 'medkit' as const },
+  { name: 'Assassin', icon: 'skull' as const },
+];
+
 
 export default function SelectClassScreen() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -56,17 +64,14 @@ export default function SelectClassScreen() {
         <View style={styles.overlay}>
           <Text style={styles.title}>Select your class:</Text>
           <View style={styles.grid}>
-            {classes.map((cls) => (
+            {classes.map(({ name, icon }) => (
               <TouchableOpacity
-                key={cls}
-                style={[styles.classBox, selected === cls && styles.selected]}
-                onPress={() => setSelected(cls)}
+                key={name}
+                style={[styles.classBox, selected === name && styles.selected]}
+                onPress={() => setSelected(name)}
               >
-                <Image
-                  source={require('../assets/icon.png')}
-                  style={styles.icon}
-                />
-                <Text style={styles.classText}>{cls}</Text>
+                <Ionicons name={icon} size={40} color="white" style={{ marginBottom: 8 }} />
+                <Text style={styles.classText}>{name}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -74,6 +79,7 @@ export default function SelectClassScreen() {
           <TouchableOpacity
             style={[styles.nextButton, !selected && styles.disabled]}
             onPress={handleFinish}
+            disabled={!selected}
           >
             <Text style={styles.nextText}>Finish hunter profile</Text>
           </TouchableOpacity>
@@ -83,13 +89,11 @@ export default function SelectClassScreen() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     padding: 20,
     paddingTop: 60,
   },
-  
   background: {
     flex: 1,
   },
@@ -120,12 +124,6 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: 'rgba(138, 159, 165, 1)',
-  },
-  icon: {
-    width: 40,
-    height: 40,
-    marginBottom: 8,
-    tintColor: 'white',
   },
   classText: {
     fontWeight: 'bold',

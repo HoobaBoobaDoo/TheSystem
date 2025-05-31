@@ -39,6 +39,16 @@ export default function ProfileScreen() {
     setTimeout(() => setRefreshing(false), 800);
   };
 
+  const classIcons: Record<string, React.ComponentProps<typeof Ionicons>['name']> = {
+  Knight: 'shield-checkmark',
+  Mage: 'flame',
+  Rogue: 'eye-off',
+  Archer: 'grid',
+  Healer: 'medkit',
+  Assassin: 'skull',
+};
+
+
   const handleAvatarPress = () => {
     Alert.alert(
       "Profile Picture",
@@ -155,16 +165,21 @@ export default function ProfileScreen() {
             </View>
 
             <View style={styles.statsRow}>
-              <TypingText style={[styles.statText, styles.white]}>
-                {user?.rank || "Rank unknown"}
-              </TypingText>
-              <TypingText style={[styles.statText, styles.white]}>
-                ⚡ {user?.class || "No class"}
-              </TypingText>
-              <TypingText style={[styles.statText, styles.white]}>
-                {user?.level ? `Lvl ${user.level}` : "No level"}
-              </TypingText>
-            </View>
+  <TypingText style={[styles.statText, styles.white]}>
+    {user?.rank || "Rank unknown"}
+  </TypingText>
+  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <Ionicons name={classIcons[user?.class ?? ''] || 'help-circle'} size={16} color="#fff" />
+    <TypingText style={[styles.statText, styles.white, { marginLeft: 6 }]}>
+      {user?.class || "No class"}
+    </TypingText>
+  </View>
+  <TypingText style={[styles.statText, styles.white]}>
+    {user?.level ? `Lvl ${user.level}` : "No level"}
+  </TypingText>
+</View>
+
+
           </ScrollView>
         </View>
 

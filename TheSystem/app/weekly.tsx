@@ -1,4 +1,3 @@
-// WeeklyScreen.tsx
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -187,7 +186,7 @@ export default function WeeklyScreen() {
 
   return (
     <View style={{ flex: 1, position: 'relative' }}>
-      <ScrollView style={styles.wrapper}>
+      <ScrollView contentContainerStyle={styles.wrapper}>
         {weeklies.map(renderCategory)}
         {weeklies.length === 0 && <Text style={styles.white}>No tasks yet</Text>}
       </ScrollView>
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
   wrapper: {
     padding: 16,
     backgroundColor: '#111',
-    flex: 1,
+    flexGrow: 1,
   },
   category: {
     marginBottom: 24,

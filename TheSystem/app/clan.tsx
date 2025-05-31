@@ -1,10 +1,9 @@
 import React from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
   RefreshControl,
   ImageBackground,
 } from 'react-native';
@@ -21,36 +20,39 @@ export default function GuildScreen() {
     }, 2000);
   };
 
+  const members = Array.from({ length: 20 }).map((_, index) => ({
+    id: index.toString(),
+    name: 'Member ' + (index + 1),
+  }));
+
+  const renderMember = ({ item }: { item: { id: string; name: string } }) => (
+    <TouchableOpacity key={item.id} style={styles.member}>
+      <TypingText style={{ color: '#fff', textAlign: 'center' }}>{item.name}</TypingText>
+    </TouchableOpacity>
+  );
+
   return (
     <ImageBackground
       source={require('../assets/neon_squares.jpeg')}
       style={styles.background}
       resizeMode="cover"
     >
-      <ScrollView
+      <FlatList
+        data={members}
+        keyExtractor={(item) => item.id}
+        renderItem={renderMember}
         contentContainerStyle={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
-      <View style={styles.overlay}>
-        <Ionicons name="person-circle" size={80} color="#fff" />
-
-        <TypingText style={styles.guildTitle}>The productive monkeys</TypingText>
-
-        <TypingText style={styles.subtitle}>
-          Our goal is to be the most productive monkeys on the planet!
-        </TypingText>
-        </View>
-
-      <View style={styles.overlay}>
-        {Array.from({ length: 20 }).map((_, index) => (
-          <TouchableOpacity key={index} style={styles.member} >
-            <TypingText style={{ color: '#fff', textAlign: 'center' }}>
-              Member
+        ListHeaderComponent={() => (
+          <View style={styles.overlay}>
+            <Ionicons name="person-circle" size={80} color="#fff" />
+            <TypingText style={styles.guildTitle}>The productive monkeys</TypingText>
+            <TypingText style={styles.subtitle}>
+              Our goal is to be the most productive monkeys on the planet!
             </TypingText>
-          </TouchableOpacity>
-        ))}
-        </View>
-      </ScrollView>
+          </View>
+        )}
+      />
     </ImageBackground>
   );
 }
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 12,
     alignSelf: 'center',
-    textAlignVertical: 'center',
     justifyContent: 'center',
   },
 });
