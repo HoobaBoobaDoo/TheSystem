@@ -7,6 +7,8 @@ import Sidebar from '@components/Sidebar';
 import Footer from '@components/Footer';
 import { getCurrentUser } from '../utils/auth';
 
+import * as ScreenOrientation from 'expo-screen-orientation';
+
 export default function Layout() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const router = useRouter();
@@ -29,6 +31,10 @@ export default function Layout() {
     }
   };
 
+   useEffect(() => {
+    ScreenOrientation.unlockAsync();
+  }, []);
+
   useEffect(() => {
     const checkAuth = async () => {
       const user = await getCurrentUser();
@@ -45,11 +51,14 @@ export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Header onMenuPress={() => setSidebarVisible(true)} navigate={navigate} />
-      <Sidebar
-        visible={sidebarVisible}
-        onClose={() => setSidebarVisible(false)}
-        navigate={navigate}
-      />
+      {sidebarVisible && (
+  <Sidebar
+    visible={sidebarVisible}
+    onClose={() => setSidebarVisible(false)}
+    navigate={navigate}
+  />
+)}
+
 
       <View style={{ flex: 1 }}>
         <Stack

@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
-  Alert,
+  ScrollView,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -59,7 +59,7 @@ export default function ProfileCreatedScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.text}>Profile created!</Text>
         <Text style={styles.text}>
           Welcome {rank ?? ''} hunter{' '}
@@ -72,25 +72,20 @@ export default function ProfileCreatedScreen() {
         >
           <Text style={styles.buttonText}>Finish profile</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingTop: 100,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   background: {
     flex: 1,
-  },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 20,
   },
   text: {
     fontSize: 28,

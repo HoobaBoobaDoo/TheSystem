@@ -1,4 +1,12 @@
-import { View, TouchableOpacity, StyleSheet, Animated, Dimensions, Image } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  Image,
+  ScrollView,
+} from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TypingText from '@components/TypingText';
@@ -42,41 +50,43 @@ export default function Sidebar({ visible, onClose, navigate }: SidebarProps) {
         <Ionicons name="close-outline" size={28} style={styles.white} />
       </TouchableOpacity>
 
-      <View style={styles.menu}>
-        {menuItems.map((item, i) => (
-          <TouchableOpacity
-            key={i}
-            style={styles.menuItem}
-            onPress={() => {
-              navigate(item.route);
-              onClose();
-            }}
-          >
-            <TypingText style={{ padding: 10 }}>{item.label}</TypingText>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <View style={styles.footer}>
-        {user?.profilePicture ? (
-          <Image source={{ uri: user.profilePicture }} style={styles.avatar} />
-        ) : (
-          <Ionicons name="person-circle-outline" size={32} style={styles.white} />
-        )}
-        <View style={styles.userInfo}>
-          <TypingText style={styles.name}>{user?.fullName || 'Display naam'}</TypingText>
-          <TypingText style={styles.username}>@{user?.username || 'username'}</TypingText>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.menu}>
+          {menuItems.map((item, i) => (
+            <TouchableOpacity
+              key={i}
+              style={styles.menuItem}
+              onPress={() => {
+                navigate(item.route);
+                onClose();
+              }}
+            >
+              <TypingText style={{ padding: 10 }}>{item.label}</TypingText>
+            </TouchableOpacity>
+          ))}
         </View>
-      </View>
 
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../assets/TheSystem-Icon.png')} // pas dit pad aan naar jouw logo image
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
-        <TypingText style={styles.logoText}>TheSystem</TypingText>
-      </View>
+        <View style={styles.footer}>
+          {user?.profilePicture ? (
+            <Image source={{ uri: user.profilePicture }} style={styles.avatar} />
+          ) : (
+            <Ionicons name="person-circle-outline" size={32} style={styles.white} />
+          )}
+          <View style={styles.userInfo}>
+            <TypingText style={styles.name}>{user?.fullName || 'Display naam'}</TypingText>
+            <TypingText style={styles.username}>@{user?.username || 'username'}</TypingText>
+          </View>
+        </View>
+
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../assets/TheSystem-Icon.png')} // pas dit pad aan naar jouw logo image
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+          <TypingText style={styles.logoText}>TheSystem</TypingText>
+        </View>
+      </ScrollView>
     </Animated.View>
   );
 }
@@ -95,6 +105,11 @@ const styles = StyleSheet.create({
   closeButton: {
     alignSelf: 'flex-end',
   },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 20,
+  },
   menu: {
     marginTop: 40,
   },
@@ -105,7 +120,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   footer: {
-    marginTop: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,

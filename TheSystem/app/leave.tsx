@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ImageBackground,
+  ActivityIndicator,
+  useWindowDimensions,
+} from 'react-native';
 import TypingText from '@components/TypingText';
 import { getCurrentUser } from '../utils/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +19,9 @@ export default function LeaveScreen() {
   const nextRoute = typeof next === 'string' ? next : '/';
 
   const [loading, setLoading] = useState(false);
+
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   const handleLeave = async () => {
     setLoading(true);
@@ -29,33 +40,46 @@ export default function LeaveScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      <View style={styles.container}>
-        <View style={styles.overlay}>
+      <View style={[styles.container, isLandscape && styles.containerLandscape]}>
+        <View style={[styles.overlay, isLandscape && styles.overlayLandscape]}>
           <Stack.Screen options={{ headerShown: false }} />
-          <View style={styles.content}>
-            <TypingText style={styles.header}>Are you sure you want to leave?</TypingText>
-            <TypingText style={styles.text}>You will fail this dungeon!</TypingText>
+
+          <View style={[styles.content, isLandscape && styles.contentLandscape]}>
+            <View style={styles.textContainer}>
+              <TypingText style={[styles.header, isLandscape && styles.headerLandscape]}>
+                Are you sure you want to leave?
+              </TypingText>
+              <TypingText style={[styles.text, isLandscape && styles.textLandscape]}>
+                You will fail this dungeon!
+              </TypingText>
+            </View>
+
+            <View style={[styles.buttonsContainer, isLandscape && styles.buttonsContainerLandscape]}>
+              <TouchableOpacity
+                style={[styles.button, loading && { opacity: 0.7 }, isLandscape && styles.buttonLandscape]}
+                onPress={handleLeave}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator size="small" color="#000" />
+                ) : (
+                  <TypingText style={[styles.buttonText, isLandscape && styles.buttonTextLandscape]}>
+                    Leave dungeon
+                  </TypingText>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.buttonCancel, isLandscape && styles.buttonCancelLandscape]}
+                onPress={() => router.back()}
+                disabled={loading}
+              >
+                <TypingText style={[styles.buttonText, isLandscape && styles.buttonTextLandscape]}>
+                  Go back
+                </TypingText>
+              </TouchableOpacity>
+            </View>
           </View>
-
-          <TouchableOpacity
-            style={[styles.button, loading && { opacity: 0.7 }]}
-            onPress={handleLeave}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color="#000" />
-            ) : (
-              <TypingText style={styles.buttonText}>Leave dungeon</TypingText>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.buttonCancel}
-            onPress={() => router.back()}
-            disabled={loading}
-          >
-            <TypingText style={styles.buttonText}>Go back</TypingText>
-          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>
@@ -69,6 +93,9 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     height: '100%',
   },
+  containerLandscape: {
+    paddingHorizontal: 40,
+  },
   background: {
     flex: 1,
     justifyContent: 'center',
@@ -80,16 +107,24 @@ const styles = StyleSheet.create({
     padding: 12,
     height: '100%',
     borderRadius: 10,
+    justifyContent: 'space-between',
+  },
+  overlayLandscape: {
+    padding: 8,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
-  text: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: '#fff',
+  contentLandscape: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+    paddingRight: 20,
   },
   header: {
     fontSize: 50,
@@ -97,13 +132,38 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  headerLandscape: {
+    fontSize: 32,
+  },
+  text: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#fff',
+  },
+  textLandscape: {
+    fontSize: 14,
+  },
+  buttonsContainer: {
+    marginTop: 20,
+  },
+  buttonsContainerLandscape: {
+    marginTop: 0,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
+  },
   button: {
     alignSelf: 'center',
     backgroundColor: 'rgba(206, 220, 224, 0.8)',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 6,
-    marginBottom: 30,
+    marginBottom: 20,
+  },
+  buttonLandscape: {
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    marginBottom: 20,
   },
   buttonCancel: {
     alignSelf: 'center',
@@ -111,10 +171,16 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 6,
-    marginBottom: 30,
+  },
+  buttonCancelLandscape: {
+    paddingVertical: 8,
+    paddingHorizontal: 24,
   },
   buttonText: {
     color: '#fff',
     fontSize: 25,
+  },
+  buttonTextLandscape: {
+    fontSize: 18,
   },
 });

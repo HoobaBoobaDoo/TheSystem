@@ -5,6 +5,7 @@ import {
   ScrollView,
   ImageBackground,
   RefreshControl,
+  useWindowDimensions,
 } from 'react-native';
 import GoalCard from '@components/GoalCard';
 import { useRouter } from 'expo-router';
@@ -20,6 +21,8 @@ import { getCurrentUser } from "../utils/auth";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   const [todos, setTodos] = useState<string[]>([]);
   const [user, setUser] = useState<User | null>(null);
@@ -82,61 +85,65 @@ export default function HomeScreen() {
   };
 
   return (
-    <ImageBackground
-      source={require('../assets/neon_room.jpeg')}
-      style={styles.background}
-      resizeMode="cover"
-    >
-      <View style={styles.container}>
-        <View style={styles.overlay}>
-          <TypingText style={styles.label}>I will:</TypingText>
+    <>
+      <ImageBackground
+        source={require('../assets/neon_room.jpeg')}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={[styles.container, isLandscape ? styles.containerLandscape : {}]}>
+          <View style={[styles.overlay, isLandscape ? styles.overlayLandscape : {}]}>
+            <TypingText style={styles.label}>I will:</TypingText>
 
-          <ScrollView
-            style={styles.todoScroll}
-            contentContainerStyle={styles.todoContent}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            <TodoList todos={todos} setTodos={setTodos} />
-          </ScrollView>
+            <ScrollView
+              style={styles.todoScroll}
+              contentContainerStyle={styles.todoContent}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              <TodoList todos={todos} setTodos={setTodos} />
+            </ScrollView>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => router.push('/confirm')}
-          >
-            <TypingText style={styles.buttonText}>Enter Dungeon</TypingText>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.push('/confirm')}
+            >
+              <TypingText style={styles.buttonText}>Enter Dungeon</TypingText>
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.overlay}>
-          <View style={styles.cardGrid}>
-            <GoalCard
-              statKey="pushups"
-              value={user?.stats.pushups ?? 0}
-              label="pushups"
-              refresh={refresh}
-            />
-            <GoalCard
-              statKey="planking"
-              value={user?.stats.planking === 0 ? '✓' : `${user?.stats.planking}s`}
-              label="Daily planking"
-              refresh={refresh}
-            />
-            <GoalCard
-              value={`${user?.stats.steps ?? 0}`}
-              label="steps"
-            />
-            <GoalCard
-              value={`${user?.stats.dungeonTime ?? 0}`}
-              label="in dungeon"
-            />
+          <View style={[styles.overlay, isLandscape ? styles.overlayLandscape : {}]}>
+            <View style={styles.cardGrid}>
+              <GoalCard
+                statKey="pushups"
+                value={user?.stats.pushups ?? 0}
+                label="pushups"
+                refresh={refresh}
+              />
+              <GoalCard
+                statKey="planking"
+                value={user?.stats.planking === 0 ? '✓' : `${user?.stats.planking}s`}
+                label="Daily planking"
+                refresh={refresh}
+              />
+              <GoalCard
+                value={`${user?.stats.steps ?? 0}`}
+                label="steps"
+              />
+              <GoalCard
+                value={`${user?.stats.dungeonTime ?? 0}`}
+                label="in dungeon"
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ImageBackground>
 
-      <AddItem onAdd={addTodo} />
-    </ImageBackground>
+      <View style={[styles.addItemContainer, isLandscape && styles.addItemContainerLandscape]}>
+        <AddItem onAdd={addTodo} />
+      </View>
+    </>
   );
 }
 
@@ -149,11 +156,19 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'space-between',
   },
+  containerLandscape: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     padding: 12,
     borderRadius: 10,
     marginBottom: 20,
+  },
+  overlayLandscape: {
+    width: '48%',
+    marginBottom: 0,
   },
   label: {
     marginBottom: 8,
@@ -193,5 +208,16 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.9)',
     fontSize: 16,
     fontWeight: '600',
+  },
+  addItemContainer: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    height: 80,
+    width: 80,
+  },
+  addItemContainerLandscape: {
+    height: 50,
+    width: 50,
   },
 });

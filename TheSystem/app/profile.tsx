@@ -3,10 +3,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
   RefreshControl,
   ImageBackground,
+  Image,
+  useWindowDimensions,
   Alert,
 } from "react-native";
 import GoalCard from "@components/GoalCard";
@@ -21,6 +22,9 @@ import { User } from "../types/User";
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
   const [refreshing, setRefreshing] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -103,16 +107,27 @@ export default function ProfileScreen() {
       resizeMode="cover"
     >
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={[
+          styles.container,
+          isLandscape && styles.containerLandscape,
+        ]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.overlay}>
-          <View style={styles.profileSection}>
+        <View
+          style={[styles.overlay, isLandscape && styles.overlayLandscape]}
+        >
+          {/* ScrollView met gecentreerde content */}
+          <ScrollView
+            contentContainerStyle={[styles.profileSectionScroll, { alignItems: "center" }]}
+          >
             <TouchableOpacity onPress={handleAvatarPress}>
               {user?.profilePicture ? (
-                <Image source={{ uri: user.profilePicture }} style={styles.avatar} />
+                <Image
+                  source={{ uri: user.profilePicture }}
+                  style={styles.avatar}
+                />
               ) : (
                 <Ionicons
                   name="person-circle-outline"
@@ -150,10 +165,12 @@ export default function ProfileScreen() {
                 {user?.level ? `Lvl ${user.level}` : "No level"}
               </TypingText>
             </View>
-          </View>
+          </ScrollView>
         </View>
 
-        <View style={styles.overlay}>
+        <View
+          style={[styles.overlay, isLandscape && styles.overlayLandscape]}
+        >
           <View style={styles.cardGrid}>
             <GoalCard
               statKey="pushups"
@@ -188,6 +205,10 @@ const styles = StyleSheet.create({
     padding: 16,
     height: "100%",
   },
+  containerLandscape: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   background: {
     flex: 1,
     justifyContent: "center",
@@ -199,6 +220,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     padding: 12,
     borderRadius: 10,
+    flex: 1,
+  },
+  overlayLandscape: {
+    width: "48%",
+    marginTop: 0,
+  },
+  profileSectionScroll: {
+    paddingBottom: 16,
+    // alignItems: 'center', // Nu inline in component
   },
   profileSection: {
     alignItems: "center",
@@ -239,11 +269,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   cardGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     gap: 12,
-    height: '45%',
+    height: "45%",
   },
   white: {
     color: "#fff",
