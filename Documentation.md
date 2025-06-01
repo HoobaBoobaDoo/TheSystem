@@ -1,11 +1,11 @@
 # Stucture:
 TheSystem/
-  app/           # All screens/pages (routed by expo-router)
-  assets/        # Images and static assets
-  components/    # Reusable UI components
-  types/         # TypeScript type definitions
-  utils/         # Utility functions (e.g., authentication)
-  .expo/         # Expo local config (should be gitignored)
+ - app/           # All screens/pages (routed by expo-router)
+ - assets/        # Images and static assets
+ - components/    # Reusable UI components
+ - types/         # TypeScript type definitions
+ - utils/         # Utility functions (e.g., authentication)
+ - .expo/         # Expo local config (should be gitignored)
 
   Key Architectural Concepts
 1. Navigation
