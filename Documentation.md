@@ -43,42 +43,38 @@ User info is loaded on each screen via getCurrentUser.
 Updates (e.g., todos, stats) are written back to AsyncStorage and reflected in UI.
 
 # List of Functionalities
-User Authentication
 
+## User Authentication:
 Registration and login
 Local authentication (biometrics, PIN) via expo-local-authentication
-User Profile Management
 
+## User Profile Management:
 Create and update user profile
 Select rank, productivity type, and class during onboarding
-Productivity Tools
 
+## Productivity Tools:
 To-do list management (add, edit, delete tasks)
 Goal tracking (create, update, complete goals)
-Draggable task/goal reordering (react-native-draggable-flatlist)
-Notifications
 
+## Notifications:
 Local push notifications for reminders and tasks (expo-notifications)
-Health & Activity Tracking
 
-Step counting and sensor-based activity tracking (expo-sensors)
-Media & Assets
+## Health & Activity Tracking:
+Step counting and sensor-based activity tracking (expo-sensors) *not functional yet*
 
+## Media & Assets:
 Pick and upload images for profile or tasks (expo-image-picker)
 Custom fonts and icons (expo-font)
-Navigation
 
+## Navigation:
 File-based navigation and routing (expo-router)
 Custom layouts (header, sidebar, footer)
-Persistent Storage
 
+## Persistent Storage:
 Save user data, tasks, and settings locally (@react-native-async-storage/async-storage)
-UI/UX Enhancements
 
+## UI/UX Enhancements:
 Animated components (react-native-reanimated)
 Gesture handling (react-native-gesture-handler)
 Status bar customization (expo-status-bar)
 Typing text animation
-Cross-Platform Support
-
-Android, iOS, and web support via Expo
