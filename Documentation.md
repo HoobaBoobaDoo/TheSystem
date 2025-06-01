@@ -45,36 +45,36 @@ Updates (e.g., todos, stats) are written back to AsyncStorage and reflected in U
 # List of Functionalities
 
 ## User Authentication:
-Registration and login
-Local authentication (biometrics, PIN) via expo-local-authentication
+- Registration and login
+- Local authentication (biometrics, PIN) via expo-local-authentication
 
 ## User Profile Management:
-Create and update user profile
-Select rank, productivity type, and class during onboarding
+- Create and update user profile
+- Select rank, productivity type, and class during onboarding
 
 ## Productivity Tools:
-To-do list management (add, edit, delete tasks)
-Goal tracking (create, update, complete goals)
+- To-do list management (add, edit, delete tasks)
+- Goal tracking (create, update, complete goals)
 
 ## Notifications:
-Local push notifications for reminders and tasks (expo-notifications)
+- Local push notifications for reminders and tasks (expo-notifications)
 
 ## Health & Activity Tracking:
-Step counting and sensor-based activity tracking (expo-sensors) *not functional yet*
+- Step counting and sensor-based activity tracking (expo-sensors) *not functional yet*
 
 ## Media & Assets:
-Pick and upload images for profile or tasks (expo-image-picker)
-Custom fonts and icons (expo-font)
+- Pick and upload images for profile or tasks (expo-image-picker)
+- Custom fonts and icons (expo-font)
 
 ## Navigation:
-File-based navigation and routing (expo-router)
-Custom layouts (header, sidebar, footer)
+- File-based navigation and routing (expo-router)
+- Custom layouts (header, sidebar, footer)
 
 ## Persistent Storage:
-Save user data, tasks, and settings locally (@react-native-async-storage/async-storage)
+- Save user data, tasks, and settings locally (@react-native-async-storage/async-storage)
 
 ## UI/UX Enhancements:
-Animated components (react-native-reanimated)
-Gesture handling (react-native-gesture-handler)
-Status bar customization (expo-status-bar)
-Typing text animation
+- Animated components (react-native-reanimated)
+- Gesture handling (react-native-gesture-handler)
+- Status bar customization (expo-status-bar)
+- Typing text animation
