@@ -92,3 +92,7 @@ Updates (e.g., todos, stats) are written back to AsyncStorage and reflected in U
 - Add the edit dashboard functionality with draggables
 - Add footsteps and other health tracking features
 - Improve overall layout
+
+# Test Strategy:
+- You're free to do as you please :)
+- Everything should work!
