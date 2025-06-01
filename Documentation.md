@@ -7,7 +7,7 @@ TheSystem/
  - utils/         # Utility functions (e.g., authentication)
  - .expo/         # Expo local config (should be gitignored)
 
-  Key Architectural Concepts
+#  Key Architectural Concepts
 1. Navigation
 Uses expo-router for file-based routing.
 Each file in app/ (e.g., app/index.tsx, app/profile.tsx) is a screen.
