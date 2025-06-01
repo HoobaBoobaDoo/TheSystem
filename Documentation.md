@@ -78,3 +78,17 @@ Updates (e.g., todos, stats) are written back to AsyncStorage and reflected in U
 - Gesture handling (react-native-gesture-handler)
 - Status bar customization (expo-status-bar)
 - Typing text animation
+
+## Performance and optimalization:
+- Lazy loading for clan members and all weekly categories
+
+# Known Issues:
+- Weekly add task shows on all weekly categories when typing.
+- Steps are not properly working
+- Draggables are not properly working
+
+# Future changes:
+- Revamp the entire app into a fun game
+- Add the edit dashboard functionality with draggables
+- Add footsteps and other health tracking features
+- Improve overall layout
