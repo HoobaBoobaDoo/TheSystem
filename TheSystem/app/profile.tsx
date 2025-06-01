@@ -201,7 +201,7 @@ export default function ProfileScreen() {
             />
             <GoalCard value={user?.stats.steps ?? 0} label="steps" />
             <GoalCard
-              value={`${user?.stats.dungeonTime ?? 0}s`}
+              value={`${user?.stats.dungeonTime ?? 0}min`}
               label="in dungeon"
             />
           </View>
