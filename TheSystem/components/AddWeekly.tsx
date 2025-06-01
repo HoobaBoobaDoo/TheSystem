@@ -22,13 +22,7 @@ export default function AddWeeklyCategory({ onAdd }: Props) {
       }, 100);
     }
   }, [showInput]);
-
-  const handleAddCategory = (name: string) => {
-  const updated = [...weeklies, { name, tasks: [] }];
-  setWeeklies(updated);
-  save(updated);
-};
-
+  
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
@@ -57,6 +51,7 @@ export default function AddWeeklyCategory({ onAdd }: Props) {
       Keyboard.dismiss();
     }
   };
+  
 
   return (
     <View style={styles.wrapper}>
